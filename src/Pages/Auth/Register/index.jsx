@@ -1,0 +1,109 @@
+import React from "react";
+import { Form, Input, Button, Card } from "antd";
+import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+
+const Register = () => {
+  return (
+    <div className="min-h-[90vh] flex items-center justify-center p-4 bg-abstract-white">
+      <Card className="w-full max-w-lg shadow-xl border-none rounded-2xl overflow-hidden">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-deep-forest">
+            Create Account
+          </h2>
+          <p className="text-slate-mist mt-2">Join us and stay organized</p>
+        </div>
+
+        <Form layout="vertical">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+            <Form.Item
+              name="name"
+              label={
+                <span className="text-deep-forest font-medium">Full Name</span>
+              }
+            >
+              <Input
+                prefix={<UserOutlined className="text-slate-mist" />}
+                placeholder="John Doe"
+                className="h-11 rounded-lg"
+              />
+            </Form.Item>
+            <Form.Item
+              name="username"
+              label={
+                <span className="text-deep-forest font-medium">Username</span>
+              }
+            >
+              <Input placeholder="@johndoe" className="h-11 rounded-lg" />
+            </Form.Item>
+          </div>
+
+          <Form.Item
+            name="email"
+            label={
+              <span className="text-deep-forest font-medium">
+                Email Address
+              </span>
+            }
+          >
+            <Input
+              prefix={<MailOutlined className="text-slate-mist" />}
+              placeholder="email@example.com"
+              className="h-11 rounded-lg"
+            />
+          </Form.Item>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+            <Form.Item
+              name="password"
+              label={
+                <span className="text-deep-forest font-medium">Password</span>
+              }
+            >
+              <Input.Password
+                prefix={<LockOutlined className="text-slate-mist" />}
+                placeholder="At least 6 characters"
+                className="h-11 rounded-lg"
+              />
+            </Form.Item>
+            <Form.Item
+              name="confirmPassword"
+              label={
+                <span className="text-deep-forest font-medium">
+                  Confirm Password
+                </span>
+              }
+            >
+              <Input.Password
+                prefix={<LockOutlined className="text-slate-mist" />}
+                placeholder="At least 6 characters"
+                className="h-11 rounded-lg"
+              />
+            </Form.Item>
+          </div>
+
+          <Form.Item>
+            <Button
+              block
+              size="large"
+              className="bg-deep-forest! text-white! border-none! font-bold h-12 rounded-lg mt-4 hover:bg-dark-sea-green! transition-all"
+            >
+              Sign Up
+            </Button>
+          </Form.Item>
+
+          <div className="text-center text-slate-mist">
+            Already have an account?{" "}
+            <Link
+              to="/auth/login"
+              className="text-dark-sea-green font-bold hover:underline"
+            >
+              Login
+            </Link>
+          </div>
+        </Form>
+      </Card>
+    </div>
+  );
+};
+
+export default Register;

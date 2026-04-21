@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+  /* Aapke Custom Theme Colors */
+  --color-dark-sea-green: #347b60;
+  --color-deep-forest: #1b332c;
+  --color-deep-terracotta: #bc6c25;
+  --color-abstract-white: #ece8e5;
+  --color-slate-mist: #a8b5af;
+}
