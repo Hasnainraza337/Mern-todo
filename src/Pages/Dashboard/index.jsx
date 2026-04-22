@@ -12,6 +12,7 @@ import NoPage from "@/components/Misc/NoPage";
 import { Route, Routes } from "react-router-dom";
 import Profile from "./Profile";
 import Setting from "./Setting";
+import EditProfile from "./EditProfile";
 
 const { Content } = Layout;
 
@@ -39,6 +40,7 @@ const Dashboard = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/update-profile" element={<EditProfile />} />
             <Route path="/add-todo" element={<AddTodos />} />
             <Route path="/todos" element={<Todos />} />
             <Route path="/all-todos" element={<AllTodos />} />

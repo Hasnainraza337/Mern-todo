@@ -1,14 +1,51 @@
 import React from "react";
-import { Card, Avatar, Button, Descriptions, Tag, Divider } from "antd";
+import {
+  Card,
+  Avatar,
+  Button,
+  Descriptions,
+  Tag,
+  Divider,
+  Popconfirm,
+  message,
+} from "antd";
 import {
   UserOutlined,
   EditOutlined,
   GithubOutlined,
   LinkedinOutlined,
   GlobalOutlined,
+  DeleteOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
+import { useAuthContext } from "@/context/AuthContext";
+import dayjs from "dayjs";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const { dispatch, user } = useAuthContext();
+  const navigate = useNavigate();
+
+  const handleDeleteAccount = () => {
+    const token = localStorage.getItem("jwt");
+    axios
+      .delete("http://localhost:8000/auth/delete-user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        dispatch({ isAuth: false, user: null });
+        localStorage.removeItem("jwt");
+        navigate("/");
+        message.success("Account deleted successfully");
+      })
+      .catch((error) => {
+        message.error("Failed to delete account");
+      });
+  };
+
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       {/* Header Profile Card */}
@@ -19,39 +56,14 @@ const Profile = () => {
             icon={<UserOutlined />}
             className="border-4 border-abstract-white shadow-lg bg-slate-mist"
           />
-          <div className="text-center md:text-left text-white">
-            <h1 className="text-3xl font-bold">Hasnain Raza</h1>
-            <p className="opacity-90 text-lg">MERN Stack Developer</p>
-            <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-2">
-              <Tag
-                color="#ECE8E5"
-                className=" text-deep-forest! border-none rounded-full px-4"
-              >
-                MongoDB
-              </Tag>
-              <Tag
-                color="#ECE8E5"
-                className=" text-deep-forest! border-none rounded-full px-4"
-              >
-                Express.js
-              </Tag>
-              <Tag
-                color="#ECE8E5"
-                className=" text-deep-forest! border-none rounded-full px-4"
-              >
-                React.js
-              </Tag>
-              <Tag
-                color="#ECE8E5"
-                className=" text-deep-forest! border-none rounded-full px-4"
-              >
-                Node.js
-              </Tag>
-            </div>
+          <div className="text-center md:text-left text-deep-forest">
+            <h1 className="text-3xl font-bold">{user?.fullName}</h1>
+            <p className="opacity-90 text-lg">{user?.roles?.join(", ")}</p>
           </div>
           <Button
             className="md:ml-auto  bg-abstract-whit!e  text-deep-forest! border-none font-bold rounded-xl h-12 px-8 flex items-center gap-2 hover:scale-105 transition-all"
             icon={<EditOutlined />}
+            onClick={() => navigate("/dashboard/update-profile")}
           >
             Edit Profile
           </Button>
@@ -70,28 +82,68 @@ const Profile = () => {
                 <span className="font-bold text-slate-mist">Full Name</span>
               }
             >
-              Hasnain Raza
+              {user?.fullName}
             </Descriptions.Item>
             <Descriptions.Item
               label={<span className="font-bold text-slate-mist">Email</span>}
             >
-              hasnain@example.com
+              {user?.email}
             </Descriptions.Item>
             <Descriptions.Item
               label={
                 <span className="font-bold text-slate-mist">Location</span>
               }
             >
-              Faisalabad, Pakistan
+              {user?.location || "N/A"}
             </Descriptions.Item>
             <Descriptions.Item
               label={<span className="font-bold text-slate-mist">Role</span>}
             >
-              Administrator
+              {user?.roles?.join(", ")}
+            </Descriptions.Item>
+            <Descriptions.Item
+              label={<span className="font-bold text-slate-mist">Join On</span>}
+            >
+              {user?.createdAt
+                ? dayjs(user.createdAt).format("DD MMM YYYY")
+                : "N/A"}
             </Descriptions.Item>
           </Descriptions>
         </Card>
 
+        <Card className="shadow-sm rounded-3xl border-2 border-red-100 bg-red-50/30">
+          <div className="flex flex-col items-center gap-4">
+            <div className="text-center">
+              <h4 className="text-red-600 font-bold flex items-center justify-center gap-2">
+                <WarningOutlined /> Danger Zone
+              </h4>
+              <p className="text-xs text-slate-500 mt-1">
+                This action cannot be undone.
+              </p>
+            </div>
+
+            <Popconfirm
+              title="Delete Account"
+              description="Are you sure you want to delete your account permanently?"
+              onConfirm={handleDeleteAccount}
+              okText="Yes, Delete"
+              cancelText="No"
+              okButtonProps={{ danger: true, loading: false }}
+              icon={<WarningOutlined style={{ color: "red" }} />}
+            >
+              <Button
+                danger
+                type="primary"
+                ghost
+                block
+                icon={<DeleteOutlined />}
+                className="rounded-xl border-red-400"
+              >
+                Delete Account
+              </Button>
+            </Popconfirm>
+          </div>
+        </Card>
         {/* Social Links */}
         <Card title="Connect" className="shadow-sm rounded-3xl border-none">
           <div className="space-y-4">

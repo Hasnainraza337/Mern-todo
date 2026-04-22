@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { Button, Drawer } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
+  const { isAuth } = useAuthContext();
 
   return (
     <nav className="bg-deep-forest px-6 py-4 flex justify-between items-center shadow-lg relative">
       {/* 1. Logo (Left Side) */}
       <div className="text-abstract-white text-2xl font-bold tracking-wider shrink-0">
         <Link to="/">
-          My<span className="text-dark-sea-green">Todos</span>
+          Task<span className="text-dark-sea-green">Manager</span>
         </Link>
       </div>
 
@@ -41,19 +43,55 @@ const Navbar = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-4">
-          <Link to="/auth/login">
-            <Button
-              type="text"
-              className="text-abstract-white! hover:text-dark-sea-green! border-none font-semibold"
-            >
-              Login
-            </Button>
-          </Link>
-          <Link to="/auth/register">
-            <Button className="bg-dark-sea-green! text-abstract-white! border-none px-6 font-bold hover:opacity-90! shadow-md transition-all rounded-md">
-              Register
-            </Button>
-          </Link>
+          {!isAuth ? (
+            <>
+              <Link to="/auth/login">
+                <Button
+                  type="text"
+                  className="text-abstract-white! hover:text-dark-sea-green! border-none font-semibold"
+                >
+                  Login
+                </Button>
+              </Link>
+              <Link to="/auth/register">
+                <Button className="bg-dark-sea-green! text-abstract-white! border-none px-6 font-bold hover:opacity-90! shadow-md transition-all rounded-md">
+                  Register
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center space-x-4">
+                <Link to="/dashboard">
+                  <Button
+                    className="
+          bg-dark-sea-green! 
+          text-abstract-white! 
+          border-none 
+          px-8 
+          py-5 
+          font-bold 
+          rounded-full 
+          shadow-[0_4px_14px_0_rgb(60,100,80,0.39)] 
+          hover:shadow-[0_6px_20px_rgba(60,100,80,0.23)] 
+          hover:scale-105 
+          active:scale-95 
+          transition-all 
+          duration-300 
+          flex 
+          items-center 
+          gap-2"
+                  >
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-abstract-white opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-abstract-white"></span>
+                    </span>
+                    Dashboard
+                  </Button>
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -70,8 +108,10 @@ const Navbar = () => {
       <Drawer
         title={
           <div className="text-xl font-bold tracking-wider">
-            <span className="text-deep-forest">My</span>
-            <span className="text-dark-sea-green">Todos</span>
+            <Link to="/">
+              <span className="text-deep-forest">Task</span>
+              <span className="text-dark-sea-green">Manager</span>
+            </Link>
           </div>
         }
         placement="right"

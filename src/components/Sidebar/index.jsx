@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Layout } from "antd";
+import { Menu, Layout, Button } from "antd";
 import {
   DashboardOutlined,
   PlusCircleOutlined,
@@ -11,11 +11,13 @@ import {
   ProfileOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
+import { useAuthContext } from "@/context/AuthContext";
 
 const { Sider } = Layout;
 
 const Sidebar = ({ collapsed }) => {
   const location = useLocation();
+  const { handleLogout } = useAuthContext();
 
   const menuItems = [
     {
@@ -72,8 +74,10 @@ const Sidebar = ({ collapsed }) => {
         <h2
           className={`text-xl font-bold transition-all duration-300 ${collapsed ? "scale-0" : "scale-100"}`}
         >
-          <span className="text-abstract-white">My</span>
-          <span className="text-dark-sea-green">Todos</span>
+          <Link to="/">
+            <span className="text-abstract-white">Task</span>
+            <span className="text-dark-sea-green">Manager</span>
+          </Link>
         </h2>
       </div>
 
@@ -86,10 +90,15 @@ const Sidebar = ({ collapsed }) => {
       />
 
       <div className="absolute bottom-6 w-full px-4">
-        <button className="flex items-center gap-3 w-full p-3 rounded-xl text-abstract-white/70 hover:text-white hover:bg-deep-terracotta transition-all duration-300 overflow-hidden">
-          <LogoutOutlined className="text-lg" />
+        <Button
+          type="primary"
+          size="large"
+          icon={<LogoutOutlined />}
+          onClick={handleLogout}
+          className="bg-deep-forest! text-abstract-white! border-none! hover:text-white! hover:bg-deep-terracotta!  transition-all duration-300 overflow-hidden"
+        >
           {!collapsed && <span className="font-semibold">Logout</span>}
-        </button>
+        </Button>
       </div>
     </Sider>
   );

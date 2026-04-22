@@ -1,9 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Button, Card } from "antd";
 import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const initialState = {
+  fullName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 
 const Register = () => {
+  const [state, setState] = useState(initialState);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setState((s) => ({ ...s, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = () => {
+    const { fullName, email, password, confirmPassword } = state;
+    const userData = { fullName, email, password };
+
+    if (confirmPassword !== password) {
+      return window.toastify("Password not match", "error");
+    }
+
+    axios
+      .post("http://localhost:8000/auth/register", userData)
+      .then((res) => {
+        const { status, data } = res;
+        if (status === 201) {
+          window.toastify(data.message, "success");
+          setState(initialState);
+          navigate("/auth/login");
+        } else {
+          window.toastify(data.message, "error");
+        }
+      })
+      .catch((err) => {
+        window.toastify(
+          err?.response?.data?.message || "Something went wrong",
+          "error",
+        );
+      });
+  };
+
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4 bg-abstract-white">
       <Card className="w-full max-w-lg shadow-xl border-none rounded-2xl overflow-hidden">
@@ -15,28 +58,21 @@ const Register = () => {
         </div>
 
         <Form layout="vertical">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
-            <Form.Item
-              name="name"
-              label={
-                <span className="text-deep-forest font-medium">Full Name</span>
-              }
-            >
-              <Input
-                prefix={<UserOutlined className="text-slate-mist" />}
-                placeholder="John Doe"
-                className="h-11 rounded-lg"
-              />
-            </Form.Item>
-            <Form.Item
-              name="username"
-              label={
-                <span className="text-deep-forest font-medium">Username</span>
-              }
-            >
-              <Input placeholder="@johndoe" className="h-11 rounded-lg" />
-            </Form.Item>
-          </div>
+          <Form.Item
+            name="name"
+            label={
+              <span className="text-deep-forest font-medium">Full Name</span>
+            }
+          >
+            <Input
+              type="text"
+              name="fullName"
+              prefix={<UserOutlined className="text-slate-mist" />}
+              placeholder="Enter your Full Name"
+              className="h-11 rounded-lg"
+              onChange={handleChange}
+            />
+          </Form.Item>
 
           <Form.Item
             name="email"
@@ -47,9 +83,12 @@ const Register = () => {
             }
           >
             <Input
+              type="email"
+              name="email"
               prefix={<MailOutlined className="text-slate-mist" />}
-              placeholder="email@example.com"
+              placeholder="Enter your Email Address"
               className="h-11 rounded-lg"
+              onChange={handleChange}
             />
           </Form.Item>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
@@ -60,9 +99,11 @@ const Register = () => {
               }
             >
               <Input.Password
+                name="password"
                 prefix={<LockOutlined className="text-slate-mist" />}
                 placeholder="At least 6 characters"
                 className="h-11 rounded-lg"
+                onChange={handleChange}
               />
             </Form.Item>
             <Form.Item
@@ -74,9 +115,11 @@ const Register = () => {
               }
             >
               <Input.Password
+                name="confirmPassword"
                 prefix={<LockOutlined className="text-slate-mist" />}
                 placeholder="At least 6 characters"
                 className="h-11 rounded-lg"
+                onChange={handleChange}
               />
             </Form.Item>
           </div>
@@ -85,7 +128,9 @@ const Register = () => {
             <Button
               block
               size="large"
+              htmlType="submit"
               className="bg-deep-forest! text-white! border-none! font-bold h-12 rounded-lg mt-4 hover:bg-dark-sea-green! transition-all"
+              onClick={handleSubmit}
             >
               Sign Up
             </Button>
@@ -97,7 +142,7 @@ const Register = () => {
               to="/auth/login"
               className="text-dark-sea-green font-bold hover:underline"
             >
-              Login
+              Sign In
             </Link>
           </div>
         </Form>

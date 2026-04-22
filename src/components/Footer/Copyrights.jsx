@@ -9,7 +9,7 @@ const Copyrights = () => {
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="text-2xl font-bold tracking-wider">
-              my<span className="text-dark-sea-green">Logo</span>
+              Task<span className="text-dark-sea-green">Manager</span>
             </div>
             <p className="text-slate-mist text-sm max-w-xs">
               Manage your daily tasks efficiently with our modern MERN Todo

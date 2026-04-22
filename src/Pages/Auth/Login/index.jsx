@@ -1,9 +1,44 @@
-import React from "react";
-import { Form, Input, Button, Checkbox, Card } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Button, Card } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuthContext } from "@/context/AuthContext";
+
+const initialState = { email: "", password: "" };
 
 const Login = () => {
+  const [state, setState] = useState(initialState);
+  const navigate = useNavigate();
+  const { readProfile } = useAuthContext();
+
+  const handleChange = (e) => {
+    setState((s) => ({ ...s, [e.target.name]: e.target.value }));
+  };
+
+  const handleLogin = () => {
+    const { email, password } = state;
+    const userData = { email, password };
+
+    axios
+      .post("http://localhost:8000/auth/login", userData)
+      .then((res) => {
+        const { status, data } = res;
+        if (status === 200) {
+          localStorage.setItem("jwt", data.token);
+          readProfile(data.token);
+          navigate("/dashboard");
+          window.toastify(data.message, "success");
+        } else {
+          window.toastify(data.message, "error");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        window.toastify("Invalid email or password", "error");
+      });
+  };
+
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4 bg-abstract-white">
       <Card className="w-full max-w-md shadow-xl border-none rounded-2xl overflow-hidden">
@@ -18,9 +53,11 @@ const Login = () => {
             rules={[{ required: true, message: "Email is required!" }]}
           >
             <Input
+              name="email"
               prefix={<MailOutlined className="text-slate-mist mr-2" />}
               placeholder="Email Address"
               className="h-11 rounded-lg"
+              onChange={handleChange}
             />
           </Form.Item>
 
@@ -29,16 +66,16 @@ const Login = () => {
             rules={[{ required: true, message: "Password is required!" }]}
           >
             <Input.Password
+              name="password"
               prefix={<LockOutlined className="text-slate-mist mr-2" />}
               placeholder="Password"
               className="h-11 rounded-lg"
+              onChange={handleChange}
             />
           </Form.Item>
 
           <div className="flex justify-between items-center mb-6">
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox className="text-deep-forest">Remember me</Checkbox>
-            </Form.Item>
+            <div></div>
             <Link
               to="/auth/forgot-password"
               title="Reset your password"
@@ -54,6 +91,7 @@ const Login = () => {
               size="large"
               htmlType="submit"
               className="bg-dark-sea-green! text-white! border-none!  font-bold h-12 rounded-lg shadow-md hover:bg-deep-forest!   transition-all"
+              onClick={handleLogin}
             >
               Sign In
             </Button>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Table, Button, Avatar, Card } from "antd";
 import { UserOutlined, StopOutlined } from "@ant-design/icons";
+import { useAuthContext } from "@/context/AuthContext";
 
 const Users = () => {
   const columns = [
