@@ -1,50 +1,80 @@
-import React from "react";
-import { Table, Avatar, Tag, Card } from "antd";
+import React, { useState, useEffect } from "react";
+import { Table,  Card, Space, Button } from "antd";
+import {  EditOutlined,DeleteOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 const AllTodos = () => {
+  const [todos, setTodos] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+
+    const getAllTodos =   () => {
+       
+        const token = localStorage.getItem("jwt");
+        setIsProcessing(true);
+          axios.get("http://localhost:8000/todo/allTodos", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((res)=>{
+          const{data}=res
+          setTodos(data?.todos);
+        }).catch((error)=>{
+          console.error("Failed to fetch todos:", error);
+        }).finally(()=>{
+          setIsProcessing(false);
+        });
+        
+       
+    };
+  useEffect(() => {
+    getAllTodos();
+  }, []);
+
   const columns = [
-    {
-      title: "User",
-      dataIndex: "user",
-      key: "user",
-      render: (user) => (
-        <div className="flex items-center gap-3">
-          <Avatar src={user.avatar} className="bg-dark-sea-green" />
-          <span className="font-medium text-deep-forest">{user.name}</span>
-        </div>
-      ),
-    },
     {
       title: "Task Title",
       dataIndex: "title",
       key: "title",
     },
     {
-      title: "Priority",
-      dataIndex: "priority",
-      key: "priority",
-      render: (p) => (
-        <Tag color={p === "High" ? "red" : "green"} border={false}>
-          {p}
-        </Tag>
+      title: "Due Date",
+      dataIndex: "dueDate",
+      key: "dueDate",
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
+      title: "Action",
+      key: "action",
+      width: 150,
+      render: (_, record) => (
+        <div className="flex gap-2">
+          <Button
+            type="text"
+            className="text-orange-500 hover:text-orange-600"
+            icon={<EditOutlined />}
+            
+          />
+          <Button
+            danger
+            type="text"
+            icon={<DeleteOutlined />}
+          />
+        </div>
       ),
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      user: { name: "Hasnain Raza", avatar: "" },
-      title: "Database Migration",
-      priority: "High",
-    },
-  ];
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-deep-forest">System-wide Tasks</h2>
+      <h2 className="text-3xl font-bold text-deep-forest">All Todos</h2>
       <Card className="shadow-lg rounded-3xl border-none">
-        <Table dataSource={data} columns={columns} />
+        <Table dataSource={todos} columns={columns} scroll={{ x: 'max-content' }} rowKey="id" pagination={{ pageSize: 10 }} loading={isProcessing} />
       </Card>
     </div>
   );

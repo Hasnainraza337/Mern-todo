@@ -1,105 +1,101 @@
-import React from "react";
-import { Table, Tag, Space, Button, Card } from "antd";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  CheckCircleOutlined,
-} from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { Table,  Card, Button } from "antd";
+import {  EditOutlined,DeleteOutlined } from "@ant-design/icons";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Todos = () => {
-  const dataSource = [
-    {
-      key: "1",
-      title: "Portfolio Website Design",
-      category: "Coding",
-      status: "In Progress",
-      date: "2026-04-25",
-    },
-    {
-      key: "2",
-      title: "Client Meeting",
-      category: "Work",
-      status: "Completed",
-      date: "2026-04-20",
-    },
-  ];
+  const [todos, setTodos] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+// Get my todo 
+    const getMyTodos =   () => {
+       
+        const token = localStorage.getItem("jwt");
+        setIsProcessing(true);
+          axios.get("http://localhost:8000/todo/myTodos", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((res)=>{
+          const{data}=res
+          setTodos(data?.todos);
+        }).catch((error)=>{
+          console.error("Failed to fetch todos:", error);
+        }).finally(()=>{
+          setIsProcessing(false);
+        });
+        
+       
+    };
+
+    // Delete todo
+    const deleteTodo = (id) => {
+      const token = localStorage.getItem("jwt");
+      axios.delete(`http://localhost:8000/todo/deleteTodo/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => {
+        const{data}=res
+      setTodos(prev => prev.filter(todo => todo.id !== id));
+       window.toastify(data.message,"success");
+      }).catch((error) => {
+        console.log(error)
+        window.toastify("internal server error","error");
+      }) 
+    };
+  useEffect(() => { 
+    getMyTodos();
+  }, []);
 
   const columns = [
     {
       title: "Task Title",
       dataIndex: "title",
       key: "title",
-      render: (text) => (
-        <span className="text-deep-forest font-semibold">{text}</span>
-      ),
-    },
-    {
-      title: "Category",
-      dataIndex: "category",
-      key: "category",
-      render: (cat) => (
-        <Tag color="blue" className="rounded-full px-3">
-          {cat}
-        </Tag>
-      ),
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => (
-        <Tag
-          color={status === "Completed" ? "#347B60" : "#BC6C25"}
-          className="rounded-full px-3"
-        >
-          {status.toUpperCase()}
-        </Tag>
-      ),
     },
     {
       title: "Due Date",
-      dataIndex: "date",
-      key: "date",
-      render: (date) => <span className="text-slate-mist">{date}</span>,
+      dataIndex: "dueDate",
+      key: "dueDate",
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
     },
     {
       title: "Action",
       key: "action",
+      width: 150,
       render: (_, record) => (
-        <Space size="middle">
+        <div className="flex gap-2">
+        <Link to={`/dashboard/update-todo/${record.id}`}>
           <Button
             type="text"
-            icon={<CheckCircleOutlined className="text-dark-sea-green" />}
+            className="text-orange-500 hover:text-orange-600"
+            icon={<EditOutlined />}
+            
           />
+          </Link>
           <Button
+            danger
             type="text"
-            icon={<EditOutlined className="text-blue-500" />}
+            icon={<DeleteOutlined />}
+            onClick={() => deleteTodo(record.id)}
           />
-          <Button
-            type="text"
-            icon={<DeleteOutlined className="text-deep-terracotta" />}
-          />
-        </Space>
+        </div>
       ),
     },
   ];
 
+
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold text-deep-forest">My Tasks</h2>
-        <Tag color="#347B60" className="text-lg py-1 px-4 rounded-lg">
-          Total: {dataSource.length}
-        </Tag>
-      </div>
-
-      <Card className="shadow-lg rounded-3xl overflow-hidden border-none">
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          pagination={{ pageSize: 5 }}
-          className="custom-table"
-        />
+      <h2 className="text-3xl font-bold text-deep-forest">My Todos</h2>
+      <Card className="shadow-lg rounded-3xl border-none">
+        <Table dataSource={todos} columns={columns} scroll={{ x: 'max-content' }} rowKey="id" pagination={{ pageSize: 10 }} loading={isProcessing} />
       </Card>
     </div>
   );

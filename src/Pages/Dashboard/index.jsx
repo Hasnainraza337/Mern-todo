@@ -13,6 +13,7 @@ import { Route, Routes } from "react-router-dom";
 import Profile from "./Profile";
 import Setting from "./Setting";
 import EditProfile from "./EditProfile";
+import EditTodo from "./EditTodo";
 
 const { Content } = Layout;
 
@@ -43,6 +44,7 @@ const Dashboard = () => {
             <Route path="/update-profile" element={<EditProfile />} />
             <Route path="/add-todo" element={<AddTodos />} />
             <Route path="/todos" element={<Todos />} />
+            <Route path="/update-todo/:id" element={<EditTodo />} />
             <Route path="/all-todos" element={<AllTodos />} />
             <Route path="/users" element={<Users />} />
             <Route path="/setting" element={<Setting />} />

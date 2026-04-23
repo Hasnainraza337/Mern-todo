@@ -1,21 +1,48 @@
-import React from "react";
-import { Form, Input, Button, DatePicker, Select, Card, Tag } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Button, DatePicker, Card, Tag } from "antd";
 import {
   PlusOutlined,
-  TagsOutlined,
   CalendarOutlined,
   FileTextOutlined,
 } from "@ant-design/icons";
+import axios from "axios";
 
-const { Option } = Select;
 const { TextArea } = Input;
 
-const AddTodos = () => {
-  const [form] = Form.useForm();
+const initialState = {  title: "",  dueDate: "", description: ""};
 
-  const onFinish = (values) => {
-    console.log("Todo Data:", values);
-    form.resetFields();
+const AddTodos = () => {
+  const [state,setState] = useState(initialState)
+  const [isProcessing,  setIsProcessing] = useState(false);
+
+   
+const handleChange = (e) => {  setState( (s) => ({...s, [e.target.name]: e.target.value}))};
+const handleDateChange = (date, dateString) => { setState((s) => ({ ...s, dueDate: dateString }));
+};
+
+const handleAddTodo =  ( ) => {
+    const {title,dueDate,description} = state;
+    const todo={title,dueDate,description}
+ 
+    setIsProcessing(true);
+    const token=localStorage.getItem("jwt");
+     axios.post("http://localhost:8000/todo/add-todo", todo,{
+        headers:{
+            authorization:`Bearer ${token}`
+        }
+      } ).then((res)=>{ 
+        const {status,data}=res;
+        if(status===201){
+            window.toastify(data.message,"success")
+            setState(initialState)
+          } 
+      }).catch((error)=>{
+        console.log(error)
+        window.toastify("something went wrong ,internal server error","error")
+      }).finally(()=>{
+        setIsProcessing(false);
+      }); 
+   
   };
 
   return (
@@ -29,13 +56,13 @@ const AddTodos = () => {
 
       <Card className="shadow-xl rounded-3xl border-none overflow-hidden bg-white/70 backdrop-blur-md">
         <Form
-          form={form}
           layout="vertical"
-          onFinish={onFinish}
+          onFinish={handleAddTodo}
           autoComplete="off"
           className="p-4"
         >
           {/* Task Title */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Form.Item
             name="title"
             label={
@@ -44,40 +71,22 @@ const AddTodos = () => {
             rules={[{ required: true, message: "Please enter a title!" }]}
           >
             <Input
+            name="title"
               prefix={<FileTextOutlined className="text-dark-sea-green mr-2" />}
               placeholder="e.g. Design Portfolio UI"
               className="h-12 rounded-xl border-slate-mist/30 focus:border-dark-sea-green"
+             onChange={handleChange}
             />
           </Form.Item>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Category Select */}
-            <Form.Item
-              name="category"
-              label={
-                <span className="text-deep-forest font-semibold">Category</span>
-              }
-            >
-              <Select
-                placeholder="Select Category"
-                className="h-12 rounded-xl"
-                suffixIcon={<TagsOutlined className="text-dark-sea-green" />}
-              >
-                <Option value="work">Work</Option>
-                <Option value="personal">Personal</Option>
-                <Option value="coding">Coding</Option>
-                <Option value="fitness">Fitness</Option>
-              </Select>
-            </Form.Item>
-
             {/* Due Date */}
             <Form.Item
-              name="dueDate"
               label={
                 <span className="text-deep-forest font-semibold">Due Date</span>
               }
             >
               <DatePicker
+              name="dueDate"
+              onChange={handleDateChange}
                 className="w-full h-12 rounded-xl"
                 suffixIcon={
                   <CalendarOutlined className="text-dark-sea-green" />
@@ -96,9 +105,11 @@ const AddTodos = () => {
             }
           >
             <TextArea
+            name="description"
               rows={4}
               placeholder="Describe your task here..."
               className="rounded-xl border-slate-mist/30 focus:border-dark-sea-green"
+              onChange={handleChange}
             />
           </Form.Item>
 
@@ -111,7 +122,7 @@ const AddTodos = () => {
               icon={<PlusOutlined />}
               className="bg-deep-terracotta! text-white! border-none! h-14 text-lg font-bold rounded-xl shadow-lg hover:scale-[1.02]! hover:shadow-xl transition-all"
             >
-              Add to My List
+              Add Todo
             </Button>
           </Form.Item>
         </Form>
