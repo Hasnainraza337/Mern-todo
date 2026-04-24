@@ -1,37 +1,54 @@
 import React, { useState, useEffect } from "react";
-import { Table,  Card, Space, Button } from "antd";
-import {  EditOutlined,DeleteOutlined } from "@ant-design/icons";
+import { Table, Card, Space, Button, Image, Avatar } from "antd";
+import { EditOutlined, DeleteOutlined, FileOutlined } from "@ant-design/icons";
 import axios from "axios";
 
 const AllTodos = () => {
   const [todos, setTodos] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
-
-    const getAllTodos =   () => {
-       
-        const token = localStorage.getItem("jwt");
-        setIsProcessing(true);
-          axios.get("http://localhost:8000/todo/allTodos", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }).then((res)=>{
-          const{data}=res
-          setTodos(data?.todos);
-        }).catch((error)=>{
-          console.error("Failed to fetch todos:", error);
-        }).finally(()=>{
-          setIsProcessing(false);
-        });
-        
-       
-    };
+  const getAllTodos = () => {
+    const token = localStorage.getItem("jwt");
+    setIsProcessing(true);
+    axios
+      .get("http://localhost:8000/todo/allTodos", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res;
+        setTodos(data?.todos);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch todos:", error);
+      })
+      .finally(() => {
+        setIsProcessing(false);
+      });
+  };
   useEffect(() => {
     getAllTodos();
   }, []);
 
   const columns = [
+    {
+      title: "Image",
+      dataIndex: "imageURL",
+      key: "imageURL",
+      render: (imageURL) =>
+        imageURL ? (
+          <Image
+            src={imageURL}
+            alt="Preview"
+            className="object-cover rounded-4xl border-gray-200 border"
+            height={50}
+            width={50}
+          />
+        ) : (
+          <Avatar size={50} icon={<FileOutlined />} />
+        ),
+    },
     {
       title: "Task Title",
       dataIndex: "title",
@@ -57,24 +74,25 @@ const AllTodos = () => {
             type="text"
             className="text-orange-500 hover:text-orange-600"
             icon={<EditOutlined />}
-            
           />
-          <Button
-            danger
-            type="text"
-            icon={<DeleteOutlined />}
-          />
+          <Button danger type="text" icon={<DeleteOutlined />} />
         </div>
       ),
     },
   ];
 
-
   return (
     <div className="space-y-6">
       <h2 className="text-3xl font-bold text-deep-forest">All Todos</h2>
       <Card className="shadow-lg rounded-3xl border-none">
-        <Table dataSource={todos} columns={columns} scroll={{ x: 'max-content' }} rowKey="id" pagination={{ pageSize: 10 }} loading={isProcessing} />
+        <Table
+          dataSource={todos}
+          columns={columns}
+          scroll={{ x: "max-content" }}
+          rowKey="id"
+          pagination={{ pageSize: 10 }}
+          loading={isProcessing}
+        />
       </Card>
     </div>
   );

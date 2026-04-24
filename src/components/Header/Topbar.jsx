@@ -61,6 +61,7 @@ const TopBar = () => {
               <Avatar
                 size="large"
                 icon={<UserOutlined />}
+                src={user?.avatar && user?.avatar !== "" ? user.avatar : null}
                 className="bg-dark-sea-green group-hover:scale-110 transition-transform"
               />
             </Space>

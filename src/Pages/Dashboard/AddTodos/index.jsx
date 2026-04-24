@@ -9,40 +9,57 @@ import axios from "axios";
 
 const { TextArea } = Input;
 
-const initialState = {  title: "",  dueDate: "", description: ""};
+const initialState = { title: "", dueDate: "", description: "" };
 
 const AddTodos = () => {
-  const [state,setState] = useState(initialState)
-  const [isProcessing,  setIsProcessing] = useState(false);
+  const [state, setState] = useState(initialState);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [image, setImage] = useState(null);
 
-   
-const handleChange = (e) => {  setState( (s) => ({...s, [e.target.name]: e.target.value}))};
-const handleDateChange = (date, dateString) => { setState((s) => ({ ...s, dueDate: dateString }));
-};
+  const handleChange = (e) => {
+    setState((s) => ({ ...s, [e.target.name]: e.target.value }));
+  };
+  const handleDateChange = (date, dateString) => {
+    setState((s) => ({ ...s, dueDate: dateString }));
+  };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+    }
+  };
 
-const handleAddTodo =  ( ) => {
-    const {title,dueDate,description} = state;
-    const todo={title,dueDate,description}
- 
+  const handleAddTodo = () => {
+    const { title, dueDate, description } = state;
+
+    const todo = { title, dueDate, description };
+
+    const formData = new FormData();
+    for (let key in todo) formData.append(key, todo[key]);
+    formData.append("image", image);
+
     setIsProcessing(true);
-    const token=localStorage.getItem("jwt");
-     axios.post("http://localhost:8000/todo/add-todo", todo,{
-        headers:{
-            authorization:`Bearer ${token}`
+    const token = localStorage.getItem("jwt");
+    axios
+      .post("http://localhost:8000/todo/add-todo", formData, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const { status, data } = res;
+        if (status === 201) {
+          window.toastify(data.message, "success");
+          setState(initialState);
         }
-      } ).then((res)=>{ 
-        const {status,data}=res;
-        if(status===201){
-            window.toastify(data.message,"success")
-            setState(initialState)
-          } 
-      }).catch((error)=>{
-        console.log(error)
-        window.toastify("something went wrong ,internal server error","error")
-      }).finally(()=>{
+      })
+      .catch((error) => {
+        console.log(error);
+        window.toastify("something went wrong ,internal server error", "error");
+      })
+      .finally(() => {
         setIsProcessing(false);
-      }); 
-   
+      });
   };
 
   return (
@@ -63,21 +80,25 @@ const handleAddTodo =  ( ) => {
         >
           {/* Task Title */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Form.Item
-            name="title"
-            label={
-              <span className="text-deep-forest font-semibold">Task Title</span>
-            }
-            rules={[{ required: true, message: "Please enter a title!" }]}
-          >
-            <Input
-            name="title"
-              prefix={<FileTextOutlined className="text-dark-sea-green mr-2" />}
-              placeholder="e.g. Design Portfolio UI"
-              className="h-12 rounded-xl border-slate-mist/30 focus:border-dark-sea-green"
-             onChange={handleChange}
-            />
-          </Form.Item>
+            <Form.Item
+              name="title"
+              label={
+                <span className="text-deep-forest font-semibold">
+                  Task Title
+                </span>
+              }
+              rules={[{ required: true, message: "Please enter a title!" }]}
+            >
+              <Input
+                name="title"
+                prefix={
+                  <FileTextOutlined className="text-dark-sea-green mr-2" />
+                }
+                placeholder="e.g. Design Portfolio UI"
+                className="h-12 rounded-xl border-slate-mist/30 focus:border-dark-sea-green"
+                onChange={handleChange}
+              />
+            </Form.Item>
             {/* Due Date */}
             <Form.Item
               label={
@@ -85,8 +106,8 @@ const handleAddTodo =  ( ) => {
               }
             >
               <DatePicker
-              name="dueDate"
-              onChange={handleDateChange}
+                name="dueDate"
+                onChange={handleDateChange}
                 className="w-full h-12 rounded-xl"
                 suffixIcon={
                   <CalendarOutlined className="text-dark-sea-green" />
@@ -105,17 +126,34 @@ const handleAddTodo =  ( ) => {
             }
           >
             <TextArea
-            name="description"
+              name="description"
               rows={4}
               placeholder="Describe your task here..."
               className="rounded-xl border-slate-mist/30 focus:border-dark-sea-green"
               onChange={handleChange}
             />
           </Form.Item>
+          <Form.Item
+            name="image"
+            label={
+              <span className="text-deep-forest font-semibold">Image</span>
+            }
+          >
+            <div className="flex items-center gap-3">
+              <Input
+                name="image"
+                type="file"
+                onChange={handleImageChange}
+                accept="image/*"
+              />
+              {image && <span className="text-green-600">{image.name}</span>}
+            </div>
+          </Form.Item>
 
           {/* Submit Button */}
           <Form.Item className="mb-0 mt-6">
             <Button
+              loading={isProcessing}
               block
               size="large"
               htmlType="submit"

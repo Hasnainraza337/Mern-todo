@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   Avatar,
@@ -8,6 +8,8 @@ import {
   Divider,
   Popconfirm,
   message,
+  Modal,
+  Image,
 } from "antd";
 import {
   UserOutlined,
@@ -25,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const { dispatch, user } = useAuthContext();
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleDeleteAccount = () => {
@@ -54,14 +57,30 @@ const Profile = () => {
           <Avatar
             size={120}
             icon={<UserOutlined />}
-            className="border-4 border-abstract-white shadow-lg bg-slate-mist"
+            src={user?.avatar && user?.avatar !== "" ? user.avatar : null}
+            className="border-4 border-abstract-white shadow-lg bg-slate-mist cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={() =>
+              user?.avatar && user?.avatar !== "" && setIsPreviewOpen(true)
+            }
           />
+          {/* Preview Modal */}
+          <Modal
+            open={isPreviewOpen}
+            footer={null}
+            onCancel={() => setIsPreviewOpen(false)}
+            centered
+            styles={{ body: { padding: 0 } }}
+            width={400}
+          >
+            <Image alt="Avatar Preview" src={user?.avatar} />
+          </Modal>
+
           <div className="text-center md:text-left text-deep-forest">
             <h1 className="text-3xl font-bold">{user?.fullName}</h1>
             <p className="opacity-90 text-lg">{user?.roles?.join(", ")}</p>
           </div>
           <Button
-            className="md:ml-auto  bg-abstract-whit!e  text-deep-forest! border-none font-bold rounded-xl h-12 px-8 flex items-center gap-2 hover:scale-105 transition-all"
+            className="md:ml-auto  bg-abstract-white!  text-deep-forest! border-none font-bold rounded-xl h-12 px-8 flex items-center gap-2 hover:scale-105 transition-all"
             icon={<EditOutlined />}
             onClick={() => navigate("/dashboard/update-profile")}
           >

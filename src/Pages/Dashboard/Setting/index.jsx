@@ -17,38 +17,6 @@ const Setting = () => {
               key: "1",
               label: (
                 <span className="px-4">
-                  <UserOutlined /> Account
-                </span>
-              ),
-              children: (
-                <div className="p-4 space-y-6">
-                  <h3 className="text-xl font-bold text-deep-forest">
-                    Account Details
-                  </h3>
-                  <Form layout="vertical" className="max-w-md">
-                    <Form.Item label="Display Name">
-                      <Input
-                        placeholder="Hasnain Raza"
-                        className="h-11 rounded-lg"
-                      />
-                    </Form.Item>
-                    <Form.Item label="Public Email">
-                      <Input
-                        placeholder="hasnain@example.com"
-                        className="h-11 rounded-lg"
-                      />
-                    </Form.Item>
-                    <Button className="bg-dark-sea-green! text-white!  border-none px-8 font-bold h-11 rounded-lg shadow-md hover:opacity-90">
-                      Save Changes
-                    </Button>
-                  </Form>
-                </div>
-              ),
-            },
-            {
-              key: "2",
-              label: (
-                <span className="px-4">
                   <LockOutlined /> Password
                 </span>
               ),
@@ -72,7 +40,7 @@ const Setting = () => {
               ),
             },
             {
-              key: "3",
+              key: "2",
               label: (
                 <span className="px-4">
                   <BellOutlined /> Notifications

@@ -3,52 +3,44 @@ import { Table, Button, Avatar, Card } from "antd";
 import { UserOutlined, StopOutlined } from "@ant-design/icons";
 import axios from "axios";
 const Users = () => {
-
-const [allUsers, setAllUsers] = useState([]);
-const [isProcessing, setIsProcessing] = useState(false);
-
-
-
+  const [allUsers, setAllUsers] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const getAllUsers = async () => {
-    
     const token = localStorage.getItem("jwt");
     setIsProcessing(true);
-      if (token) {
-        const response = await axios.get("http://localhost:8000/auth/allUsers", {
+    if (token) {
+      const response = await axios
+        .get("http://localhost:8000/auth/allUsers", {
           headers: { Authorization: `Bearer ${token}` },
         })
-        .then((res )=>{
-          const {data}=res
+        .then((res) => {
+          const { data } = res;
           setAllUsers(data.users);
         })
-        .catch(()=>
-           window.toastify("Failed to fetch all users","error")
-        )
-        .finally(()=>setIsProcessing(false));
-      }
-    
+        .catch(() => window.toastify("Failed to fetch all users", "error"))
+        .finally(() => setIsProcessing(false));
+    }
   };
-useEffect(() => {
-  getAllUsers();
-}, []);
+  useEffect(() => {
+    getAllUsers();
+  }, []);
 
   const columns = [
     {
       title: "Profile",
-      dataIndex: "name",
-      key: "name",
-      render: (text) => (
+      dataIndex: "fullName",
+      key: "fullName",
+      render: (text, record) => (
         <div className="flex items-center gap-3">
-          <Avatar icon={<UserOutlined />} className="bg-slate-mist" />
+          <Avatar
+            icon={<UserOutlined />}
+            src={record?.avatar && record?.avatar !== "" ? record.avatar : null}
+            className="bg-slate-mist border border-gray-200"
+          />
           <span className="font-bold text-deep-forest">{text}</span>
         </div>
       ),
-    },
-    {
-      title: "FullName",
-      dataIndex: "fullName",
-      key: "fullName",
     },
     {
       title: "Email",
@@ -81,12 +73,16 @@ useEffect(() => {
     },
   ];
 
- 
   return (
-    <div className="space-y-6"> 
+    <div className="space-y-6">
       <h2 className="text-3xl font-bold text-deep-forest">User Management</h2>
       <Card className="shadow-lg rounded-3xl border-none">
-        <Table dataSource={allUsers} columns={columns} scroll={{x:"max-content"}} loading={isProcessing} />
+        <Table
+          dataSource={allUsers}
+          columns={columns}
+          scroll={{ x: "max-content" }}
+          loading={isProcessing}
+        />
       </Card>
     </div>
   );
