@@ -144,22 +144,61 @@ const Navbar = () => {
           </Link>
 
           <div className="flex flex-col space-y-3 pt-4">
-            <Link to="/auth/login">
-              <Button
-                block
-                className="border-deep-forest! text-deep-forest! font-bold"
-              >
-                Login
-              </Button>
-            </Link>
-            <Link to="/auth/register">
-              <Button
-                block
-                className="bg-dark-sea-green! text-white! border-none! font-bold"
-              >
-                Register
-              </Button>
-            </Link>
+            {!isAuth ? (
+              <>
+                <Link to="/auth/login">
+                  <Button
+                    block
+                    className="border-deep-forest! text-deep-forest! font-bold"
+                  >
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/auth/register">
+                  <Button
+                    block
+                    className="bg-dark-sea-green! text-white! border-none! font-bold"
+                  >
+                    Register
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                  <Link to="/dashboard" className="w-full sm:w-auto">
+                    <Button
+                      className="
+          bg-dark-sea-green! 
+          text-abstract-white! 
+          border-none 
+          px-8 
+          py-5 
+          font-bold 
+          rounded-full 
+          shadow-[0_4px_14px_0_rgb(60,100,80,0.39)] 
+          hover:shadow-[0_6px_20px_rgba(60,100,80,0.23)] 
+          hover:scale-105 
+          active:scale-95 
+          transition-all 
+          duration-300 
+          flex 
+          items-center 
+          w-full               
+          sm:w-auto             
+          justify-center
+          gap-2"
+                    >
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-abstract-white opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-abstract-white"></span>
+                      </span>
+                      Dashboard
+                    </Button>
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </Drawer>

@@ -9,6 +9,7 @@ import {
   HomeOutlined,
   SettingOutlined,
   ProfileOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
@@ -51,6 +52,11 @@ const Sidebar = ({ collapsed }) => {
       label: <Link to="/dashboard/users">Users</Link>,
     },
     {
+      key: "/dashboard/messages",
+      icon: <MessageOutlined />,
+      label: <Link to="/dashboard/messages">Messages</Link>,
+    },
+    {
       key: "/dashboard/setting",
       icon: <SettingOutlined />,
       label: <Link to="/dashboard/setting">Settings</Link>,
@@ -69,6 +75,8 @@ const Sidebar = ({ collapsed }) => {
       collapsed={collapsed}
       className="bg-deep-forest! min-h-screen sticky left-0 top-0 shadow-2xl"
       width={260}
+      collapsedWidth={80}
+      breakpoint="md"
     >
       <div className="p-6 text-center">
         <h2

@@ -51,7 +51,6 @@ const Profile = () => {
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
-      {/* Header Profile Card */}
       <Card className="shadow-xl rounded-3xl border-none overflow-hidden bg-linear-to-r from-deep-forest to-dark-sea-green p-6">
         <div className="flex flex-col md:flex-row items-center gap-6">
           <Avatar

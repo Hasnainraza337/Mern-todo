@@ -14,6 +14,7 @@ import Profile from "./Profile";
 import Setting from "./Setting";
 import EditProfile from "./EditProfile";
 import EditTodo from "./EditTodo";
+import Messages from "./Messages";
 
 const { Content } = Layout;
 
@@ -44,6 +45,7 @@ const Dashboard = () => {
             <Route path="/update-profile" element={<EditProfile />} />
             <Route path="/add-todo" element={<AddTodos />} />
             <Route path="/todos" element={<Todos />} />
+            <Route path="/messages" element={<Messages />} />
             <Route path="/update-todo/:id" element={<EditTodo />} />
             <Route path="/all-todos" element={<AllTodos />} />
             <Route path="/users" element={<Users />} />

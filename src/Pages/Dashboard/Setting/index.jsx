@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Tabs, Form, Input, Button, Switch, Divider } from "antd";
 import { LockOutlined, BellOutlined, UserOutlined } from "@ant-design/icons";
 
 const Setting = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => setIsMobile(window.innerWidth < 768);
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
   return (
     <div className="max-w-4xl mx-auto">
       <h2 className="text-3xl font-bold text-deep-forest mb-8">Settings</h2>
@@ -10,7 +19,8 @@ const Setting = () => {
       <Card className="shadow-lg rounded-3xl border-none overflow-hidden">
         <Tabs
           defaultActiveKey="1"
-          tabPosition="left"
+          size={isMobile ? "small" : "default"}
+          tabPlacement={isMobile ? "top" : "left"}
           className="p-4"
           items={[
             {

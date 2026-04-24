@@ -1,13 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Button, Card } from "antd";
 import {
   MailOutlined,
   SendOutlined,
   EnvironmentOutlined,
-  PhoneOutlined,
 } from "@ant-design/icons";
+import axios from "axios";
+
+const initialState = { name: "", email: "", message: "" };
 
 const Contact = () => {
+  const [form] = Form.useForm();
+  const [state, setState] = useState(initialState);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleChange = (e) => {
+    setState((s) => ({ ...s, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = () => {
+    const { name, email, message } = state;
+
+    const contactData = {
+      name: name.trim(),
+      email: email.trim(),
+      message: message.trim(),
+    };
+    if (!contactData.name || !contactData.email || !contactData.message) {
+      return window.toastify("Please fill all the fields", "error");
+    }
+
+    setIsProcessing(true);
+    axios
+      .post("http://localhost:8000/contact/create-contact", contactData)
+      .then((res) => {
+        const { status, data } = res;
+        if (status === 201) {
+          window.toastify(data.message, "success");
+          form.resetFields();
+          setState(initialState);
+        }
+      })
+      .catch((error) => {
+        window.toastify("Internal Server Error , Try Again", "error");
+      })
+      .finally(() => {
+        setIsProcessing(false);
+      });
+  };
+
   return (
     <>
       <div className="py-16 px-6 bg-abstract-white min-h-screen">
@@ -55,7 +96,7 @@ const Contact = () => {
 
             {/* Contact Form */}
             <Card className="shadow-2xl rounded-3xl border-none p-4 bg-white/80 backdrop-blur-sm">
-              <Form layout="vertical">
+              <Form form={form} layout="vertical">
                 <Form.Item
                   label={
                     <span className="font-semibold text-deep-forest">
@@ -64,8 +105,10 @@ const Contact = () => {
                   }
                 >
                   <Input
+                    name="name"
                     placeholder="Enter your name"
                     className="h-11 rounded-lg border-slate-mist/30 focus:border-dark-sea-green"
+                    onChange={handleChange}
                   />
                 </Form.Item>
                 <Form.Item
@@ -76,8 +119,10 @@ const Contact = () => {
                   }
                 >
                   <Input
+                    name="email"
                     placeholder="Enter your email"
                     className="h-11 rounded-lg border-slate-mist/30 focus:border-dark-sea-green"
+                    onChange={handleChange}
                   />
                 </Form.Item>
                 <Form.Item
@@ -90,13 +135,19 @@ const Contact = () => {
                   <Input.TextArea
                     rows={4}
                     placeholder="How can I help?"
+                    name="message"
                     className="rounded-lg border-slate-mist/30 focus:border-dark-sea-green"
+                    onChange={handleChange}
                   />
                 </Form.Item>
                 <Button
                   block
+                  loading={isProcessing}
+                  disabled={isProcessing}
                   icon={<SendOutlined />}
+                  htmlType="submit"
                   className="bg-deep-forest! text-white! border-none! h-12 font-bold rounded-lg hover:bg-dark-sea-green! transition-all shadow-lg"
+                  onClick={handleSubmit}
                 >
                   Send Message
                 </Button>
