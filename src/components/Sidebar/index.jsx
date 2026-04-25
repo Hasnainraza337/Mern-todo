@@ -16,7 +16,7 @@ import { useAuthContext } from "@/context/AuthContext";
 
 const { Sider } = Layout;
 
-const Sidebar = ({ collapsed }) => {
+const Sidebar = ({ collapsed, setCollapsed }) => {
   const location = useLocation();
   const { handleLogout } = useAuthContext();
 
@@ -77,16 +77,24 @@ const Sidebar = ({ collapsed }) => {
       width={260}
       collapsedWidth={80}
       breakpoint="md"
+      onBreakpoint={(broken) => {
+        setCollapsed(broken);
+      }}
     >
       <div className="p-6 text-center">
-        <h2
-          className={`text-xl font-bold transition-all duration-300 ${collapsed ? "scale-0" : "scale-100"}`}
-        >
-          <Link to="/">
-            <span className="text-abstract-white">Task</span>
-            <span className="text-dark-sea-green">Manager</span>
-          </Link>
-        </h2>
+        <Link to="/" className="text-xl font-bold transition-all duration-300">
+          {collapsed ? (
+            <span className="animate-in fade-in zoom-in duration-300">
+              <span className="text-abstract-white">T</span>
+              <span className="text-dark-sea-green">M</span>
+            </span>
+          ) : (
+            <span className="animate-in fade-in duration-300">
+              <span className="text-abstract-white">Task</span>
+              <span className="text-dark-sea-green">Manager</span>
+            </span>
+          )}
+        </Link>
       </div>
 
       <Menu

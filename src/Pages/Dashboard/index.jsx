@@ -23,7 +23,7 @@ const Dashboard = () => {
 
   return (
     <Layout className="min-h-screen bg-abstract-white">
-      <Sidebar collapsed={collapsed} />
+      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
       <Layout className="bg-transparent">
         {/* Top Header */}
@@ -32,9 +32,9 @@ const Dashboard = () => {
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
-            className="text-deep-forest! text-lg"
+            className="text-deep-forest! text-lg hidden! sm:block!"
           />
-          <TopBar /> {/* Isme user profile aur notifications hain */}
+          <TopBar />
         </header>
 
         {/* Main Content Area */}

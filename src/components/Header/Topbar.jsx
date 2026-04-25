@@ -11,6 +11,14 @@ import { Link } from "react-router-dom";
 
 const TopBar = () => {
   const { user, isAuth, handleLogout } = useAuthContext();
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
+
   const items = [
     {
       key: "1",
@@ -33,17 +41,19 @@ const TopBar = () => {
   ];
 
   return (
-    <header className="h-16 bg-white border-b border-slate-mist/30 flex items-center justify-between px-8 sticky top-0 z-10">
+    <header className="h-16   bg-white border-b border-slate-mist/30 flex items-center justify-between px-6   sticky top-0 z-10">
       {/* Search ya Welcome Message */}
-      <div className="hidden sm:block">
+      <div className=" w-full! justify-between! sm:justify-end!  ">
         <h1 className="text-deep-forest font-semibold text-lg">
-          Welcome back,{" "}
-          <span className="text-dark-sea-green">{user?.fullName}</span>
+          {getGreeting()},{" "}
+          <span className="text-dark-sea-green">
+            {user?.fullName || "Guest"}
+          </span>
         </h1>
       </div>
 
       {/* Right Side Icons */}
-      <div className="flex items-center space-x-6 ml-auto">
+      <div className="flex items-center w-full! justify-end!  space-x-6">
         <button className="text-slate-mist hover:text-dark-sea-green transition-colors relative">
           <BellOutlined className="text-xl" />
           <span className="absolute -top-1 -right-1 bg-deep-terracotta text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">
@@ -53,11 +63,11 @@ const TopBar = () => {
         {isAuth && (
           <Dropdown menu={{ items }} placement="bottomRight" arrow>
             <Space className="cursor-pointer group">
-              <div className="text-right hidden md:block">
+              {/* <div className="text-right">
                 <p className="text-sm font-bold text-deep-forest leading-none">
                   {user?.fullName}
                 </p>
-              </div>
+              </div> */}
               <Avatar
                 size="large"
                 icon={<UserOutlined />}
