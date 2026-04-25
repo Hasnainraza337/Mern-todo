@@ -52,9 +52,11 @@ const Copyrights = () => {
             <h3 className="text-lg font-semibold mb-4 text-dark-sea-green">
               Get in Touch
             </h3>
-            <p className="text-sm text-slate-mist">Email: support@mylogo.com</p>
             <p className="text-sm text-slate-mist">
-              Location: Faisalabad, Pakistan
+              Email: hasnainraza.dev@gmail.com{" "}
+            </p>
+            <p className="text-sm text-slate-mist">
+              Location: Naya Lahore,Punjab,Pakistan
             </p>
           </div>
         </div>

@@ -160,7 +160,7 @@ const AddTodos = () => {
               icon={<PlusOutlined />}
               className="bg-deep-terracotta! text-white! border-none! h-14 text-lg font-bold rounded-xl shadow-lg hover:scale-[1.02]! hover:shadow-xl transition-all"
             >
-              Add Todo
+              Add Task
             </Button>
           </Form.Item>
         </Form>

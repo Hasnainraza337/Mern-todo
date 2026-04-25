@@ -112,7 +112,7 @@ const Todos = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-deep-forest">My Todos</h2>
+      <h2 className="text-3xl font-bold text-deep-forest">My Tasks</h2>
       <Card className="shadow-lg rounded-3xl border-none">
         <Table
           dataSource={todos}

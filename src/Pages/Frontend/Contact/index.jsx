@@ -74,7 +74,7 @@ const Contact = () => {
                     <p className="text-xs text-slate-mist uppercase tracking-widest font-bold">
                       Email Us
                     </p>
-                    <p className="font-semibold">contact@hasnainraza.dev</p>
+                    <p className="font-semibold">hasnainraza.dev@gmail.com</p>
                   </div>
                 </div>
 
@@ -87,7 +87,7 @@ const Contact = () => {
                       Our Location
                     </p>
                     <p className="font-semibold">
-                      NiA Lahore , Punjab, Pakistan
+                      Naya Lahore , Punjab, Pakistan
                     </p>
                   </div>
                 </div>

@@ -15,6 +15,7 @@ import Setting from "./Setting";
 import EditProfile from "./EditProfile";
 import EditTodo from "./EditTodo";
 import Messages from "./Messages";
+import ResetPassword from "./ResetPassword";
 
 const { Content } = Layout;
 
@@ -50,6 +51,7 @@ const Dashboard = () => {
             <Route path="/all-todos" element={<AllTodos />} />
             <Route path="/users" element={<Users />} />
             <Route path="/setting" element={<Setting />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="*" element={<NoPage />} />
           </Routes>
         </Content>

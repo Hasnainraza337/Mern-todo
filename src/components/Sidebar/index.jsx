@@ -34,17 +34,17 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     {
       key: "/dashboard/add-todo",
       icon: <PlusCircleOutlined />,
-      label: <Link to="/dashboard/add-todo">Add Todos</Link>,
+      label: <Link to="/dashboard/add-todo">Add Task</Link>,
     },
     {
       key: "/dashboard/todos",
       icon: <UnorderedListOutlined />,
-      label: <Link to="/dashboard/todos">My Todos</Link>,
+      label: <Link to="/dashboard/todos">My Tasks</Link>,
     },
     {
       key: "/dashboard/all-todos",
       icon: <UnorderedListOutlined />,
-      label: <Link to="/dashboard/all-todos">All Todos</Link>,
+      label: <Link to="/dashboard/all-todos">All Tasks</Link>,
     },
     {
       key: "/dashboard/users",
