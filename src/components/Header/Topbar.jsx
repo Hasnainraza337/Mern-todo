@@ -16,10 +16,8 @@ const TopBar = () => {
   const { user, isAuth, handleLogout } = useAuthContext();
   const [notifications, setNotifications] = useState([]);
 
-  // useRef use karenge taake render ke darmiyan count track rahe bina effect trigger kiye
   const prevCountRef = useRef(0);
 
-  // 1. Sound Play Function
   const playSound = () => {
     const audio = new Audio(notificationSound);
     audio
@@ -80,12 +78,11 @@ const TopBar = () => {
 
       const handleManualFetch = () => {
         console.log("Fetching new notifications manually...");
-        fetchNotifications(true); // Manual fetch par sound bajega
+        fetchNotifications(true);
       };
 
       window.addEventListener("updateNotification", handleManualFetch);
 
-      // Interval ko thora kam kiya hai (30 sec) taake zyada real-time feel ho
       const interval = setInterval(() => fetchNotifications(false), 30000);
 
       return () => {
@@ -105,7 +102,6 @@ const TopBar = () => {
 
       setNotifications((prev) => {
         const updated = prev.filter((n) => n._id !== id);
-        // Delete ke baad count update karein taake agla notification phir se sound trigger kare
         prevCountRef.current = updated.filter((n) => !n.isRead).length;
         return updated;
       });
