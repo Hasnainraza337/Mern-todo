@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Card, message } from "antd";
 import {
   LockOutlined,
@@ -13,11 +13,19 @@ const ResetPassword = () => {
   const { token } = useParams();
   const navigate = useNavigate();
 
-  const handleResetPassword = async (values) => {
-    // if (values.password !== values.confirmPassword) {
-    //   return message.error("Passwords do not match!");
-    // }
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        await axios.get(`http://localhost:8000/auth/verify-token/${token}`);
+      } catch (err) {
+        message.toastify("Link is invalid or has expired!", "error");
+        navigate("/auth/login");
+      }
+    };
+    verifyToken();
+  }, [token]);
 
+  const handleResetPassword = async (values) => {
     setIsProcessing(true);
     try {
       const response = await axios.post(
@@ -37,7 +45,7 @@ const ResetPassword = () => {
     } catch (error) {
       const errorMsg =
         error.response?.data?.message || "Link expired or invalid!";
-      message.error(errorMsg);
+      message.toastify(errorMsg, "error");
     } finally {
       setIsProcessing(false);
     }

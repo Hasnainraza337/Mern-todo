@@ -9,6 +9,7 @@ const initialState = { email: "", password: "" };
 
 const Login = () => {
   const [state, setState] = useState(initialState);
+  const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
   const { readProfile } = useAuthContext();
 
@@ -16,28 +17,56 @@ const Login = () => {
     setState((s) => ({ ...s, [e.target.name]: e.target.value }));
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const { email, password } = state;
     const userData = { email, password };
 
-    axios
-      .post("http://localhost:8000/auth/login", userData)
-      .then((res) => {
-        const { status, data } = res;
-        if (status === 200) {
-          localStorage.setItem("jwt", data.token);
-          readProfile(data.token);
-          navigate("/dashboard");
-          window.toastify(data.message, "success");
-        } else {
-          window.toastify(data.message, "error");
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        window.toastify("Invalid email or password", "error");
-      });
+    setIsProcessing(true);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/auth/login",
+        userData,
+      );
+
+      if (res.status === 200) {
+        const token = res.data.token;
+        localStorage.setItem("jwt", token);
+        await readProfile(token);
+        window.toastify(res.data.message, "success");
+        navigate("/dashboard", { replace: true });
+      }
+    } catch (err) {
+      console.error(err);
+      const msg = err.response?.data?.message || "Invalid email or password";
+      window.toastify(msg, "error");
+    } finally {
+      setIsProcessing(false);
+    }
   };
+  // const handleLogin = () => {
+  //   const { email, password } = state;
+  //   const userData = { email, password };
+  //   setIsProcessing(true);
+  //   axios
+  //     .post("http://localhost:8000/auth/login", userData)
+  //     .then((res) => {
+  //       const { status, data } = res;
+  //       if (status === 200) {
+  //         localStorage.setItem("jwt", data.token);
+  //         readProfile(data.token);
+  //         navigate("/dashboard", { replace: true });
+  //         window.toastify(data.message, "success");
+  //       } else {
+  //         window.toastify(data.message, "error");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       window.toastify("Invalid email or password", "error");
+  //     })
+  //     .finally(() => setIsProcessing(false));
+  // };
 
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4 bg-abstract-white">
@@ -89,6 +118,7 @@ const Login = () => {
             <Button
               block
               size="large"
+              loading={isProcessing}
               htmlType="submit"
               className="bg-dark-sea-green! text-white! border-none!  font-bold h-12 rounded-lg shadow-md hover:bg-deep-forest!   transition-all"
               onClick={handleLogin}

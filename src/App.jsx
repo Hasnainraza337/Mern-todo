@@ -1,5 +1,5 @@
 import "./App.css";
-import Routes from "@/Pages/Routes";
+import Routes from "@/pages/Routes";
 import ScreenLoader from "./components/Misc/ScreenLoader";
 import { useAuthContext } from "./context/AuthContext";
 

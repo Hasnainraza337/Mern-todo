@@ -53,7 +53,7 @@ const Copyrights = () => {
               Get in Touch
             </h3>
             <p className="text-sm text-slate-mist">
-              Email: hasnainraza.dev@gmail.com{" "}
+              Email: hasnainrazadev7@gmail.com{" "}
             </p>
             <p className="text-sm text-slate-mist">
               Location: Naya Lahore,Punjab,Pakistan

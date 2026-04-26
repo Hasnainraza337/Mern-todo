@@ -58,7 +58,7 @@ const Users = () => {
       key: "roles",
       render: (roles) => (
         <span className="capitalize text-dark-sea-green font-medium">
-          {roles}
+          {Array.isArray(roles) ? roles.join(", ") : roles}
         </span>
       ),
     },

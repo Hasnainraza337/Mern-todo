@@ -14,18 +14,18 @@ const EditTodo = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    
+
     axios
       .get(`http://localhost:8000/todo/singleTodo/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
         const todo = res.data.todo;
-        
+
         form.setFieldsValue({
           title: todo.title,
           description: todo.description,
-          dueDate: todo.dueDate ? dayjs(todo.dueDate, "YYYY-MM-DD") : null   
+          dueDate: todo.dueDate ? dayjs(todo.dueDate, "YYYY-MM-DD") : null,
         });
       })
       .catch((err) => {
@@ -40,30 +40,35 @@ const EditTodo = () => {
   const handleUpdate = (values) => {
     const token = localStorage.getItem("jwt");
     const updatedValues = {
-    ...values,
-    dueDate: values.dueDate ? values.dueDate.format("YYYY-MM-DD") : null,
-  };
+      ...values,
+      dueDate: values.dueDate ? values.dueDate.format("YYYY-MM-DD") : null,
+    };
     setIsProcessing(true);
 
-    axios.patch(`http://localhost:8000/todo/updateTodo/${id}`, updatedValues, {
-      headers: { Authorization: `Bearer ${token}` },
-    }).then((res) => {
-      window.toastify(res.data.message, "success");
-      navigate("/dashboard/todos");
-    }).catch((error) => {
-      window.toastify("Internal server error", "error");
-    }).finally(() => {
-      setIsProcessing(false);
-    });
+    axios
+      .patch(`http://localhost:8000/todo/updateTodo/${id}`, updatedValues, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        window.toastify(res.data.message, "success");
+        window.dispatchEvent(new Event("updateNotification"));
+        navigate("/dashboard/todos");
+      })
+      .catch((error) => {
+        window.toastify("Internal server error", "error");
+      })
+      .finally(() => {
+        setIsProcessing(false);
+      });
   };
 
   return (
     <div className="max-w-3xl mx-auto">
       <div className="flex items-center gap-4 mb-8">
-        <Button 
-          shape="circle" 
-          icon={<ArrowLeftOutlined />} 
-          onClick={() => navigate(-1)} 
+        <Button
+          shape="circle"
+          icon={<ArrowLeftOutlined />}
+          onClick={() => navigate(-1)}
           className="border-slate-mist/30 text-deep-forest"
         />
         <h2 className="text-3xl font-bold text-deep-forest">Edit Task</h2>
@@ -71,7 +76,9 @@ const EditTodo = () => {
 
       <Card className="shadow-2xl rounded-3xl border-none bg-white/80 backdrop-blur-md p-4 min-h-[300px]">
         {getTodo ? (
-          <div className="flex justify-center items-center py-20"><Spin size="large" /></div>
+          <div className="flex justify-center items-center py-20">
+            <Spin size="large" />
+          </div>
         ) : (
           <Form
             form={form}
@@ -81,7 +88,11 @@ const EditTodo = () => {
           >
             <Form.Item
               name="title"
-              label={<span className="text-deep-forest font-semibold">Task Title</span>}
+              label={
+                <span className="text-deep-forest font-semibold">
+                  Task Title
+                </span>
+              }
               rules={[{ required: true, message: "Title is required!" }]}
             >
               <Input className="h-12 rounded-xl border-slate-mist/30" />
@@ -89,23 +100,34 @@ const EditTodo = () => {
 
             <Form.Item
               name="dueDate"
-              label={<span className="text-deep-forest font-semibold">Due Date</span>}
+              label={
+                <span className="text-deep-forest font-semibold">Due Date</span>
+              }
             >
               <DatePicker className="w-full h-12 rounded-xl" />
             </Form.Item>
 
             <Form.Item
               name="description"
-              label={<span className="text-deep-forest font-semibold">Description</span>}
+              label={
+                <span className="text-deep-forest font-semibold">
+                  Description
+                </span>
+              }
             >
-              <Input.TextArea rows={4} className="rounded-xl border-slate-mist/30" />
+              <Input.TextArea
+                rows={4}
+                className="rounded-xl border-slate-mist/30"
+              />
             </Form.Item>
 
             <div className="flex justify-end gap-4 mt-6">
-              <Button onClick={() => navigate(-1)} className="rounded-xl px-8">Cancel</Button>
-              <Button 
-                type="primary" 
-                htmlType="submit" 
+              <Button onClick={() => navigate(-1)} className="rounded-xl px-8">
+                Cancel
+              </Button>
+              <Button
+                type="primary"
+                htmlType="submit"
                 loading={isProcessing}
                 className="bg-deep-forest! border-none! rounded-xl px-10 font-bold"
               >

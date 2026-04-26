@@ -11,23 +11,54 @@ const AuthContext = ({ children }) => {
   const [isAppLoading, setIsAppLoading] = useState(true);
   const navigate = useNavigate();
 
-  const readProfile = (token) => {
+  const readProfile = async (token) => {
     const jwt = token || localStorage.getItem("jwt");
-    axios
-      .get("http://localhost:8000/auth/user-profile", {
+    if (!jwt) {
+      setState(intialState);
+      setIsAppLoading(false);
+      return;
+    }
+
+    try {
+      const res = await axios.get("http://localhost:8000/auth/user-profile", {
         headers: { Authorization: `Bearer ${jwt}` },
-      })
-      .then((res) => {
-        const { status, data } = res;
-        if (status === 200) {
-          setState({ isAuth: true, user: data.user });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => setIsAppLoading(false));
+      });
+      if (res.status === 200) {
+        setState({ isAuth: true, user: res.data.user });
+        return res.data.user;
+      }
+    } catch (err) {
+      setState(intialState);
+      throw err;
+    } finally {
+      setIsAppLoading(false);
+    }
   };
+
+  // const readProfile = (token) => {
+  //   const jwt = token || localStorage.getItem("jwt");
+  //   if (!jwt) {
+  //     setState(intialState);
+  //     setIsAppLoading(false);
+  //     return;
+  //   }
+  //   axios
+  //     .get("http://localhost:8000/auth/user-profile", {
+  //       headers: { Authorization: `Bearer ${jwt}` },
+  //     })
+  //     .then((res) => {
+  //       const { status, data } = res;
+  //       if (status === 200) {
+  //         setState({ isAuth: true, user: data.user });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       localStorage.removeItem("jwt");
+  //       setState(intialState);
+  //     })
+  //     .finally(() => setIsAppLoading(false));
+  // };
 
   useEffect(() => {
     readProfile();
@@ -36,8 +67,8 @@ const AuthContext = ({ children }) => {
   const handleLogout = () => {
     localStorage.removeItem("jwt");
     setState(intialState);
-    navigate("/");
     window.toastify("Logout successful", "success");
+    navigate("/auth/login", { replace: true });
   };
 
   return (

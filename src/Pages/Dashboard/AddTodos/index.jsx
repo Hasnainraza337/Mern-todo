@@ -50,6 +50,7 @@ const AddTodos = () => {
         const { status, data } = res;
         if (status === 201) {
           window.toastify(data.message, "success");
+          window.dispatchEvent(new Event("updateNotification"));
           setState(initialState);
         }
       })

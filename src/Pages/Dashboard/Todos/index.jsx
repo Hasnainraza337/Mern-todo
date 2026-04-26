@@ -42,6 +42,7 @@ const Todos = () => {
       .then((res) => {
         const { data } = res;
         setTodos((prev) => prev.filter((todo) => todo.id !== id));
+        window.dispatchEvent(new Event("updateNotification"));
         window.toastify(data.message, "success");
       })
       .catch((error) => {

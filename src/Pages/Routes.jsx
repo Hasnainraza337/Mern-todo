@@ -10,7 +10,15 @@ const Index = () => {
       <Routes>
         <Route path="/*" element={<Frontend />} />
         <Route path="/auth/*" element={<Auth />} />
-        <Route path="/dashboard/*" element={<Dashboard />} />
+        <Route
+          path="/dashboard/*"
+          element={
+            <PrivateRouting
+              Component={Dashboard}
+              allowedRoles={["super-admin", "user"]}
+            />
+          }
+        />
       </Routes>
     </>
   );

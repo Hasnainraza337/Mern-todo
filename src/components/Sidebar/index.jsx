@@ -18,7 +18,8 @@ const { Sider } = Layout;
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
   const location = useLocation();
-  const { handleLogout } = useAuthContext();
+  const { handleLogout, user } = useAuthContext();
+  const isSuperAdmin = user?.roles?.includes("super-admin");
 
   const menuItems = [
     {
@@ -41,21 +42,26 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       icon: <UnorderedListOutlined />,
       label: <Link to="/dashboard/todos">My Tasks</Link>,
     },
-    {
-      key: "/dashboard/all-todos",
-      icon: <UnorderedListOutlined />,
-      label: <Link to="/dashboard/all-todos">All Tasks</Link>,
-    },
-    {
-      key: "/dashboard/users",
-      icon: <UserOutlined />,
-      label: <Link to="/dashboard/users">Users</Link>,
-    },
-    {
-      key: "/dashboard/messages",
-      icon: <MessageOutlined />,
-      label: <Link to="/dashboard/messages">Messages</Link>,
-    },
+    ...(isSuperAdmin
+      ? [
+          {
+            key: "/dashboard/all-todos",
+            icon: <UnorderedListOutlined />,
+            label: <Link to="/dashboard/all-todos">All Tasks</Link>,
+          },
+          {
+            key: "/dashboard/users",
+            icon: <UserOutlined />,
+            label: <Link to="/dashboard/users">Users</Link>,
+          },
+          {
+            key: "/dashboard/messages",
+            icon: <MessageOutlined />,
+            label: <Link to="/dashboard/messages">Messages</Link>,
+          },
+        ]
+      : []),
+
     {
       key: "/dashboard/setting",
       icon: <SettingOutlined />,
@@ -64,7 +70,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     {
       key: "/",
       icon: <HomeOutlined />,
-      label: <Link to="/">Back to Website</Link>,
+      label: <Link to="/">Back to Home Page</Link>,
     },
   ];
 

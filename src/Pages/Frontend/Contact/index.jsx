@@ -38,7 +38,11 @@ const Contact = () => {
         if (status === 201) {
           window.toastify(data.message, "success");
           form.resetFields();
-          setState(initialState);
+          setState({
+            name: "",
+            email: "",
+            message: "",
+          });
         }
       })
       .catch((error) => {
@@ -74,7 +78,7 @@ const Contact = () => {
                     <p className="text-xs text-slate-mist uppercase tracking-widest font-bold">
                       Email Us
                     </p>
-                    <p className="font-semibold">hasnainraza.dev@gmail.com</p>
+                    <p className="font-semibold">hasnainrazadev7@gmail.com</p>
                   </div>
                 </div>
 
@@ -106,6 +110,7 @@ const Contact = () => {
                 >
                   <Input
                     name="name"
+                    value={state.name}
                     placeholder="Enter your name"
                     className="h-11 rounded-lg border-slate-mist/30 focus:border-dark-sea-green"
                     onChange={handleChange}
@@ -120,6 +125,7 @@ const Contact = () => {
                 >
                   <Input
                     name="email"
+                    value={state.email}
                     placeholder="Enter your email"
                     className="h-11 rounded-lg border-slate-mist/30 focus:border-dark-sea-green"
                     onChange={handleChange}
@@ -136,6 +142,7 @@ const Contact = () => {
                     rows={4}
                     placeholder="How can I help?"
                     name="message"
+                    value={state.message}
                     className="rounded-lg border-slate-mist/30 focus:border-dark-sea-green"
                     onChange={handleChange}
                   />

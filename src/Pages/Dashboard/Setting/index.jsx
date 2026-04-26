@@ -25,6 +25,7 @@ const Setting = () => {
 
       if (response.status === 200) {
         window.toastify("Password Changed successfully!", "success");
+        window.dispatchEvent(new Event("updateNotification"));
         form.resetFields();
       }
     } catch (error) {
