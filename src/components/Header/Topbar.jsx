@@ -32,12 +32,9 @@ const TopBar = () => {
       const token = localStorage.getItem("jwt");
       if (!token) return;
 
-      const res = await axios.get(
-        "http://localhost:8000/notification/notifications",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const res = await axios.get(`${window.API}/notification/notifications`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       const newNotifications = res.data.notifications || [];
       const currentUnreadCount = newNotifications.filter(
@@ -96,7 +93,7 @@ const TopBar = () => {
     e.stopPropagation();
     try {
       const token = localStorage.getItem("jwt");
-      await axios.delete(`http://localhost:8000/notification/delete/${id}`, {
+      await axios.delete(`${window.API}/notification/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
