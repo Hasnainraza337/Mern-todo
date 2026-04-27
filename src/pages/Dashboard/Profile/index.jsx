@@ -155,7 +155,7 @@ const Profile = () => {
                 ghost
                 block
                 icon={<DeleteOutlined />}
-                className="rounded-xl border-red-400"
+                className="rounded-xl border-red-400 overflow-hidden whitespace-nowrap"
               >
                 Delete Account
               </Button>
