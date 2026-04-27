@@ -4,7 +4,7 @@ import Auth from "./Auth";
 import Dashboard from "./Dashboard";
 import PrivateRouting from "../components/Misc/PrivateRouting";
 
-const Index = () => {
+const AppRoutes = () => {
   return (
     <>
       <Routes>
@@ -24,4 +24,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default AppRoutes;
