@@ -61,7 +61,7 @@ const TopBar = () => {
     try {
       const token = localStorage.getItem("jwt");
       await axios.patch(
-        "http://localhost:8000/notification/read-all",
+        `${window.API}/notification/read-all`,
         {},
         { headers: { Authorization: `Bearer ${token}` } },
       );
