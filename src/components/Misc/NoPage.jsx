@@ -21,7 +21,7 @@ const NoPage = () => {
       <div className="relative z-10 w-full max-w-xl text-center">
         {/* Floating Icon Section */}
         <div className="mb-8 flex justify-center">
-          <div className="w-24 h-24 bg-white shadow-2xl shadow-deep-forest/10 rounded-2rem flex items-center justify-center border border-white/50 animate-bounce duration-[3000ms]">
+          <div className="w-24 h-24 bg-white shadow-2xl shadow-deep-forest/10 rounded-2rem flex items-center justify-center border border-white/50 animate-bounce duration-3000ms">
             <ExclamationCircleOutlined className="text-4xl text-dark-sea-green" />
           </div>
         </div>
