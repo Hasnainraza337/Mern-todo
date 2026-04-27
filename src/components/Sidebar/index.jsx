@@ -12,7 +12,7 @@ import {
   MessageOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 
 const { Sider } = Layout;
 

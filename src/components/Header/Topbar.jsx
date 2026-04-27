@@ -7,10 +7,10 @@ import {
   BellOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import notificationSound from "@/assets/audios/notification.mp3";
+import notificationSound from "../../assets/audios/notification.mp3";
 
 const TopBar = () => {
   const { user, isAuth, handleLogout } = useAuthContext();

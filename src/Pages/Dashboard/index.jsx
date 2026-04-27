@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { Layout, Button } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import Sidebar from "@/components/Sidebar";
-import TopBar from "@/components/Header/Topbar";
+import Sidebar from "../../components/Sidebar";
+import TopBar from "../../components/Header/Topbar";
 import Home from "./Home";
 import AddTodos from "./AddTodos";
 import Todos from "./Todos";
 import AllTodos from "./AllTodos";
 import Users from "./Users";
-import NoPage from "@/components/Misc/NoPage";
+import NoPage from "../../components/Misc/NoPage";
 import Profile from "./Profile";
 import Setting from "./Setting";
 import EditProfile from "./EditProfile";
 import EditTodo from "./EditTodo";
 import Messages from "./Messages";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 import { Route, Routes } from "react-router-dom";
 
 const { Content } = Layout;

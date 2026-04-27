@@ -3,7 +3,7 @@ import { Form, Input, Button, Card } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "../../../context/AuthContext";
 
 const initialState = { email: "", password: "" };
 

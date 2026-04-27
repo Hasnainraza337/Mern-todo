@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
-import NoPage from "@/components/Misc/NoPage";
+import NoPage from "../../components/Misc/NoPage";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 

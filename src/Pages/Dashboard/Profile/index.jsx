@@ -20,7 +20,7 @@ import {
   DeleteOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "../../../context/AuthContext";
 import dayjs from "dayjs";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
