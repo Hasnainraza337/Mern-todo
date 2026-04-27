@@ -32,7 +32,7 @@ const Contact = () => {
 
     setIsProcessing(true);
     axios
-      .post("http://localhost:8000/contact/create-contact", contactData)
+      .post(`${window.API}/contact/create-contact`, contactData)
       .then((res) => {
         const { status, data } = res;
         if (status === 201) {

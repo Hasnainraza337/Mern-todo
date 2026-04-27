@@ -28,7 +28,7 @@ const Register = () => {
     }
 
     axios
-      .post("http://localhost:8000/auth/register", userData)
+      .post(`${window.API}/auth/register`, userData)
       .then((res) => {
         const { status, data } = res;
         if (status === 201) {

@@ -48,7 +48,7 @@ const EditProfile = () => {
       const token = localStorage.getItem("jwt");
 
       const response = await axios.delete(
-        "http://localhost:8000/auth/deleteProfileImage",
+        `${window.API}/auth/deleteProfileImage`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -89,7 +89,7 @@ const EditProfile = () => {
     try {
       const token = localStorage.getItem("jwt");
       const response = await axios.patch(
-        "http://localhost:8000/auth/update-profile",
+        `${window.API}/auth/update-profile`,
         formData,
         {
           headers: {

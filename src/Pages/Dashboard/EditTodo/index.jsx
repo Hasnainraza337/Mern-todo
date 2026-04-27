@@ -16,7 +16,7 @@ const EditTodo = () => {
     const token = localStorage.getItem("jwt");
 
     axios
-      .get(`http://localhost:8000/todo/singleTodo/${id}`, {
+      .get(`${window.API}/todo/singleTodo/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -46,7 +46,7 @@ const EditTodo = () => {
     setIsProcessing(true);
 
     axios
-      .patch(`http://localhost:8000/todo/updateTodo/${id}`, updatedValues, {
+      .patch(`${window.API}/todo/updateTodo/${id}`, updatedValues, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

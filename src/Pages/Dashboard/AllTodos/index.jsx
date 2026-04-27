@@ -11,7 +11,7 @@ const AllTodos = () => {
     const token = localStorage.getItem("jwt");
     setIsProcessing(true);
     axios
-      .get("http://localhost:8000/todo/allTodos", {
+      .get(`${window.API}/todo/allTodos`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

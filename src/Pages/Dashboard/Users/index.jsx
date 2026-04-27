@@ -6,12 +6,12 @@ const Users = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const getAllUsers = async () => {
+  const getAllUsers = () => {
     const token = localStorage.getItem("jwt");
     setIsProcessing(true);
     if (token) {
-      const response = await axios
-        .get("http://localhost:8000/auth/allUsers", {
+      axios
+        .get(`${window.API}/auth/allUsers`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {

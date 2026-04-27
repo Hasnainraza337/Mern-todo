@@ -33,7 +33,7 @@ const Profile = () => {
   const handleDeleteAccount = () => {
     const token = localStorage.getItem("jwt");
     axios
-      .delete("http://localhost:8000/auth/delete-user", {
+      .delete(`${window.API}/auth/delete-user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

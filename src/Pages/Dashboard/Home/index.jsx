@@ -1,10 +1,80 @@
-import React from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Home = () => {
+  const [todos, setTodos] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [recentTodos, setRecentTodos] = useState([]);
+
+  const getMyTodos = () => {
+    const token = localStorage.getItem("jwt");
+    setIsProcessing(true);
+    axios
+      .get(`${window.API}/todo/myTodos`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res;
+        setTodos(data?.todos);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch todos:", error);
+      })
+      .finally(() => {
+        setIsProcessing(false);
+      });
+  };
+
+  // Recent Todo
+  const getRecentTodos = () => {
+    const token = localStorage.getItem("jwt");
+    setIsProcessing(true);
+    axios
+      .get(`${window.API}/todo/recentTodos`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res;
+        setRecentTodos(data?.todos || []);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch todos:", error);
+      })
+      .finally(() => {
+        setIsProcessing(false);
+      });
+  };
+
+  useEffect(() => {
+    getMyTodos();
+    getRecentTodos();
+  }, []);
+
   const stats = [
-    { title: "Total Todos", value: "24", color: "bg-dark-sea-green" },
-    { title: "Pending", value: "08", color: "bg-deep-terracotta" },
-    { title: "Completed", value: "16", color: "bg-deep-forest" },
+    {
+      title: "Total Todos",
+      value: isProcessing ? "Loading..." : todos?.length,
+      color: "bg-dark-sea-green",
+    },
+    {
+      title: "Pending",
+      value: isProcessing
+        ? "Loading..."
+        : todos?.filter((todo) => !todo.completed).length,
+      color: "bg-deep-terracotta",
+    },
+    {
+      title: "Completed",
+      value: isProcessing
+        ? "Loading..."
+        : todos?.filter((todo) => todo.completed).length,
+      color: "bg-deep-forest",
+    },
   ];
 
   return (
@@ -36,11 +106,37 @@ const Home = () => {
       {/* Content Box */}
       <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-mist/20">
         <h3 className="text-xl font-bold text-deep-forest mb-4">
-          Recent Activity
+          Recent Activity (Today)
         </h3>
-        <p className="text-slate-mist italic">
-          Yahan aapki haliya todos ki list nazar aayegi...
-        </p>
+
+        {recentTodos.length > 0 ? (
+          <div className="space-y-4">
+            {recentTodos.map((todo) => (
+              <div
+                key={todo._id}
+                className="flex items-center justify-between p-4 border-b border-gray-50 hover:bg-gray-50 rounded-xl transition-colors"
+              >
+                <div>
+                  <h4 className="font-semibold text-deep-forest">
+                    {todo.title}
+                  </h4>
+                  <p className="text-sm text-slate-mist">
+                    {todo.description || "No description"}
+                  </p>
+                </div>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-bold ${todo.isCompleted ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+                >
+                  {todo.isCompleted ? "Done" : "Active"}
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-slate-mist italic">
+            Aaj koi naya todo add nahi kiya gaya.
+          </p>
+        )}
       </div>
     </>
   );

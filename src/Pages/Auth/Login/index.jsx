@@ -24,10 +24,7 @@ const Login = () => {
     setIsProcessing(true);
 
     try {
-      const res = await axios.post(
-        "http://localhost:8000/auth/login",
-        userData,
-      );
+      const res = await axios.post(`${window.API}/auth/login`, userData);
 
       if (res.status === 200) {
         const token = res.data.token;

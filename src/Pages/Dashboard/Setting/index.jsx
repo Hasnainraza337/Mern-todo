@@ -13,7 +13,7 @@ const Setting = () => {
     try {
       const token = localStorage.getItem("jwt");
       const response = await axios.patch(
-        "http://localhost:8000/auth/change-password",
+        `${window.API}/auth/change-password`,
         {
           currentPassword: values.currentPassword,
           newPassword: values.newPassword,

@@ -41,7 +41,7 @@ const AddTodos = () => {
     setIsProcessing(true);
     const token = localStorage.getItem("jwt");
     axios
-      .post("http://localhost:8000/todo/add-todo", formData, {
+      .post(`${window.API}/todo/add-todo`, formData, {
         headers: {
           authorization: `Bearer ${token}`,
         },

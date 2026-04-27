@@ -20,7 +20,7 @@ const AuthContext = ({ children }) => {
     }
 
     try {
-      const res = await axios.get("http://localhost:8000/auth/user-profile", {
+      const res = await axios.get(`${window.API}/auth/user-profile`, {
         headers: { Authorization: `Bearer ${jwt}` },
       });
       if (res.status === 200) {

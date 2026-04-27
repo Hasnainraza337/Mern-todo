@@ -9,7 +9,7 @@ const Messages = () => {
   const getMessages = () => {
     setIsProcessing(true);
     axios
-      .get("http://localhost:8000/contact/get-contacts")
+      .get(`${window.API}/contact/get-contacts`)
       .then((res) => {
         const { status, data } = res;
         if (status === 200) {
@@ -30,7 +30,7 @@ const Messages = () => {
   //   delete messages
   const deleteMessage = (id) => {
     axios
-      .delete(`http://localhost:8000/contact/delete-contact/${id}`)
+      .delete(`${window.API}/contact/delete-contact/${id}`)
       .then((res) => {
         const { status } = res;
         if (status === 200) {

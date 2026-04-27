@@ -9,3 +9,6 @@ window.isValidEmail = (email) => /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/.test(email);
 
 // Globaly create toastify
 window.toastify = (msg, type) => message[type](msg);
+
+// Api Url
+window.API = import.meta.env.VITE_API_URL;

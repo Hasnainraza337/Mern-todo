@@ -14,12 +14,9 @@ const ForgotPassword = () => {
   const handleForgotPassword = async (values) => {
     setIsProcessing(true);
     try {
-      const response = await axios.post(
-        "http://localhost:8000/auth/reset-password",
-        {
-          email: values.email,
-        },
-      );
+      const response = await axios.post(`${window.API}/auth/reset-password`, {
+        email: values.email,
+      });
 
       if (response.status === 200) {
         window.toastify("Reset link sent to your email!", "success");

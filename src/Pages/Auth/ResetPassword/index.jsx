@@ -16,7 +16,7 @@ const ResetPassword = () => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        await axios.get(`http://localhost:8000/auth/verify-token/${token}`);
+        await axios.get(`${window.API}/auth/verify-token/${token}`);
       } catch (err) {
         message.toastify("Link is invalid or has expired!", "error");
         navigate("/auth/login");
@@ -29,7 +29,7 @@ const ResetPassword = () => {
     setIsProcessing(true);
     try {
       const response = await axios.post(
-        "http://localhost:8000/auth/save-new-password",
+        `${window.API}/auth/save-new-password`,
         {
           token: token,
           newPassword: values.newPassword,

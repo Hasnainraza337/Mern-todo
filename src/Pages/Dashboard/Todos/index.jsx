@@ -13,7 +13,7 @@ const Todos = () => {
     const token = localStorage.getItem("jwt");
     setIsProcessing(true);
     axios
-      .get("http://localhost:8000/todo/myTodos", {
+      .get(`${window.API}/todo/myTodos`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -34,7 +34,7 @@ const Todos = () => {
   const deleteTodo = (id) => {
     const token = localStorage.getItem("jwt");
     axios
-      .delete(`http://localhost:8000/todo/deleteTodo/${id}`, {
+      .delete(`${window.API}/todo/deleteTodo/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
