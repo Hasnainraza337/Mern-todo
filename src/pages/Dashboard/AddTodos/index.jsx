@@ -51,7 +51,6 @@ const AddTodos = () => {
         if (status === 201) {
           window.toastify(data.message, "success");
           window.dispatchEvent(new Event("updateNotification"));
-          setState(initialState);
         }
       })
       .catch((error) => {
@@ -105,6 +104,8 @@ const AddTodos = () => {
               label={
                 <span className="text-deep-forest font-semibold">Due Date</span>
               }
+              name="dueDate"
+              rules={[{ required: true, message: "Please select a due date!" }]}
             >
               <DatePicker
                 name="dueDate"

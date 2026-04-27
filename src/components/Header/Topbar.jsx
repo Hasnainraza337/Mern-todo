@@ -8,13 +8,16 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import { useAuthContext } from "../../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import notificationSound from "../../assets/audios/notification.mp3";
 
 const TopBar = () => {
   const { user, isAuth, handleLogout } = useAuthContext();
   const [notifications, setNotifications] = useState([]);
+  const location = useLocation();
+
+  const isDashboard = location.pathname.startsWith("/dashboard");
 
   const prevCountRef = useRef(0);
 
@@ -139,24 +142,28 @@ const TopBar = () => {
   ];
 
   return (
-    <header className="h-16 bg-white border-b border-slate-mist/30 flex items-center justify-between px-6 sticky top-0 z-10">
-      <div className="flex-1">
-        {isAuth && user && (
-          <h1 className="text-deep-forest font-semibold text-lg truncate">
-            {getGreeting()},{" "}
-            <span className="text-dark-sea-green">{user?.fullName}</span>
-          </h1>
-        )}
-      </div>
+    <header
+      className={`h-16 bg-white border-b border-slate-mist/30 flex items-center justify-between ${isDashboard ? "flex-1 justify-end!" : ""} px-0 sm:px-6!  space-x-3 sticky top-0 z-10`}
+    >
+      {!isDashboard && (
+        <div className="flex-1">
+          {isAuth && user && (
+            <h1 className="text-deep-forest font-semibold text-lg wrap-break-words">
+              {getGreeting()}{" "}
+              <span className="text-dark-sea-green">{user?.fullName}</span>
+            </h1>
+          )}
+        </div>
+      )}
 
-      <div className="flex items-center space-x-6 shrink-0">
+      <div className="flex items-center space-x-1 shrink-0">
         <Dropdown
           trigger={["click"]}
           placement="bottomRight"
           arrow
           menu={{ items: [] }}
-          dropdownRender={() => (
-            <div className="bg-white shadow-2xl rounded-lg w-80 border border-slate-mist/10 overflow-hidden">
+          popupRender={() => (
+            <div className="bg-white shadow-2xl rounded-lg w-64 sm:w-80 border border-slate-mist/10 overflow-hidden">
               <div className="p-4 border-b border-slate-mist/10 flex justify-between items-center bg-slate-50/50">
                 <span className="font-bold text-deep-forest">
                   Notifications
@@ -206,7 +213,8 @@ const TopBar = () => {
 
                       <button
                         onClick={(e) => deleteNotification(e, n._id)}
-                        className="absolute right-2 top-4 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-red-500 cursor-pointer border-none bg-transparent"
+                        className="absolute right-2 top-4 transition-opacity text-slate-400 hover:text-red-500 cursor-pointer border-none bg-transparent 
+    opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                         title="Delete notification"
                       >
                         <DeleteOutlined style={{ fontSize: "14px" }} />
@@ -240,7 +248,7 @@ const TopBar = () => {
           >
             <Space className="cursor-pointer group">
               <Avatar
-                size="large"
+                size={{ xs: 32, sm: 40, md: 40, lg: 40, xl: 40, xxl: 40 }}
                 icon={<UserOutlined />}
                 src={user?.avatar && user?.avatar !== "" ? user.avatar : null}
                 className="bg-dark-sea-green group-hover:scale-110 transition-transform"

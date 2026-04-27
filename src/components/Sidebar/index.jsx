@@ -81,7 +81,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       collapsed={collapsed}
       className="bg-deep-forest! min-h-screen sticky left-0 top-0 shadow-2xl"
       width={260}
-      collapsedWidth={80}
+      collapsedWidth={70}
       breakpoint="md"
       onBreakpoint={(broken) => {
         setCollapsed(broken);

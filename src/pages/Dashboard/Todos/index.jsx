@@ -86,6 +86,7 @@ const Todos = () => {
       title: "Description",
       dataIndex: "description",
       key: "description",
+      render: (text) => (text && text.trim() !== "" ? text : "N/A"),
     },
     {
       title: "Action",

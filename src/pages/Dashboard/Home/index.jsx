@@ -104,7 +104,7 @@ const Home = () => {
       </div>
 
       {/* Content Box */}
-      <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-mist/20">
+      <div className="bg-white rounded-3xl p-2 sm:p-8 shadow-sm border border-slate-mist/20">
         <h3 className="text-xl font-bold text-deep-forest mb-4">
           Recent Activity (Today)
         </h3>
@@ -116,7 +116,7 @@ const Home = () => {
                 key={todo._id}
                 className="flex items-center justify-between p-4 border-b border-gray-50 hover:bg-gray-50 rounded-xl transition-colors"
               >
-                <div>
+                <div className="flex-1 min-w-0">
                   <h4 className="font-semibold text-deep-forest">
                     {todo.title}
                   </h4>
