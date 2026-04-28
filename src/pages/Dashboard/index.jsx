@@ -24,29 +24,22 @@ const Dashboard = () => {
   const isSuperAdmin = user?.roles?.includes("super-admin");
 
   return (
-    // 'h-screen' aur 'overflow-hidden' se poora page scroll hona band ho jayega
     <Layout className="h-screen overflow-hidden bg-abstract-white">
-      {/* Sidebar yahan rahega, isko fixed ki zaroorat nahi kyunki parent h-screen hai */}
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
-      {/* Right Side container */}
       <Layout className="bg-transparent flex flex-col h-screen">
-        {/* Header - Sticky ki jagah bas top par rahega */}
         <header className="h-16 bg-white border-b border-slate-mist/20 flex items-center px-4 shrink-0 justify-between">
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
-            className="text-deep-forest! text-lg hidden sm:block"
+            className="text-deep-forest! text-lg hidden! sm:block!"
           />
           <TopBar />
         </header>
 
-        {/* Content - Sirf yeh area scroll hoga */}
         <Content className="p-6 md:p-10 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
-            {" "}
-            {/* Optional: Content ko center rakhne ke liye */}
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/profile" element={<Profile />} />

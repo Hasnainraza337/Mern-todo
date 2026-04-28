@@ -106,9 +106,6 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
             theme="dark"
           />
         </div>
-
-        {/* 3. Logout Section (Hamesha visible bottom par) */}
-        {/* 'mt-auto' aur padding fix kar di hai mobile ke liye */}
         <div className="p-4 shrink-0 mb-2 border-t border-white/5">
           <Button
             type="primary"

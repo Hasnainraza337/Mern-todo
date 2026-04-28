@@ -23,6 +23,12 @@ const Register = () => {
     const { fullName, email, password, confirmPassword } = state;
     const userData = { fullName, email, password };
 
+    if (password.length < 6) {
+      return window.toastify(
+        "Password must be at least 6 characters long",
+        "error",
+      );
+    }
     if (confirmPassword !== password) {
       return window.toastify("Password not match", "error");
     }
