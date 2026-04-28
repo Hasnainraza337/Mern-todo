@@ -12,6 +12,7 @@ const Login = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
   const { readProfile } = useAuthContext();
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const handleChange = (e) => {
     setState((s) => ({ ...s, [e.target.name]: e.target.value }));
@@ -20,6 +21,17 @@ const Login = () => {
   const handleLogin = async () => {
     const { email, password } = state;
     const userData = { email, password };
+
+    if (!emailRegex.test(email)) {
+      return window.toastify("Please enter a valid email address", "error");
+    }
+
+    if (password.length < 6) {
+      return window.toastify(
+        "Password must be at least 6 characters long",
+        "error",
+      );
+    }
 
     setIsProcessing(true);
 

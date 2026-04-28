@@ -14,7 +14,7 @@ const initialState = {
 const Register = () => {
   const [state, setState] = useState(initialState);
   const navigate = useNavigate();
-
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const handleChange = (e) => {
     setState((s) => ({ ...s, [e.target.name]: e.target.value }));
   };
@@ -22,6 +22,13 @@ const Register = () => {
   const handleSubmit = () => {
     const { fullName, email, password, confirmPassword } = state;
     const userData = { fullName, email, password };
+
+    if (fullName.length < 3) {
+      return window.toastify("please enter fullName correctly", "error");
+    }
+    if (!emailRegex.test(email)) {
+      return window.toastify("Please enter a valid email address", "error");
+    }
 
     if (password.length < 6) {
       return window.toastify(

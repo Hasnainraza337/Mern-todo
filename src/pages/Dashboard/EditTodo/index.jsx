@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, DatePicker, Card, Spin, message } from "antd";
-import { SaveOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import {
+  Form,
+  Input,
+  Button,
+  DatePicker,
+  Card,
+  Spin,
+  message,
+  Upload,
+} from "antd";
+import {
+  SaveOutlined,
+  ArrowLeftOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -11,55 +24,59 @@ const EditTodo = () => {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [getTodo, setGetTodo] = useState(true);
+  const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-
     axios
       .get(`${window.API}/todo/singleTodo/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
         const todo = res.data.todo;
-
         form.setFieldsValue({
           title: todo.title,
           description: todo.description,
-          dueDate: todo.dueDate ? dayjs(todo.dueDate, "YYYY-MM-DD") : null,
+          dueDate: todo.dueDate ? dayjs(todo.dueDate) : null,
         });
+        if (todo.imageURL) {
+          setFileList([{ url: todo.imageURL, name: "Current Image" }]);
+        }
       })
-      .catch((err) => {
-        window.toastify("Failed to load todo data", "error");
-        navigate("/dashboard/todos");
-      })
-      .finally(() => {
-        setGetTodo(false);
-      });
-  }, [id, form, navigate]);
+      .finally(() => setGetTodo(false));
+  }, [id, form]);
 
   const handleUpdate = (values) => {
     const token = localStorage.getItem("jwt");
-    const updatedValues = {
-      ...values,
-      dueDate: values.dueDate ? values.dueDate.format("YYYY-MM-DD") : null,
-    };
+    const formData = new FormData();
+
+    formData.append("title", values.title);
+    formData.append("description", values.description || "");
+    formData.append(
+      "dueDate",
+      values.dueDate ? values.dueDate.format("YYYY-MM-DD") : "",
+    );
+
+    // Agar nayi file select ki gayi hai
+    if (fileList[0]?.originFileObj) {
+      formData.append("image", fileList[0].originFileObj);
+    }
+
     setIsProcessing(true);
 
     axios
-      .patch(`${window.API}/todo/updateTodo/${id}`, updatedValues, {
-        headers: { Authorization: `Bearer ${token}` },
+      .patch(`${window.API}/todo/updateTodo/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((res) => {
         window.toastify(res.data.message, "success");
-        window.dispatchEvent(new Event("updateNotification"));
         navigate("/dashboard/todos");
       })
-      .catch((error) => {
-        window.toastify("Internal server error", "error");
-      })
-      .finally(() => {
-        setIsProcessing(false);
-      });
+      .catch(() => window.toastify("Update failed", "error"))
+      .finally(() => setIsProcessing(false));
   };
 
   return (
@@ -119,6 +136,22 @@ const EditTodo = () => {
                 rows={4}
                 className="rounded-xl border-slate-mist/30"
               />
+            </Form.Item>
+            <Form.Item label="Update Image">
+              <Upload
+                listType="picture-card"
+                fileList={fileList}
+                beforeUpload={() => false}
+                onChange={({ fileList }) => setFileList(fileList)}
+                maxCount={1}
+              >
+                {fileList.length < 1 && (
+                  <div>
+                    <UploadOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+                )}
+              </Upload>
             </Form.Item>
 
             <div className="flex justify-end gap-4 mt-6">
