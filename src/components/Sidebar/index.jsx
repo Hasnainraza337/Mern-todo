@@ -12,7 +12,7 @@ import {
   MessageOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
-import { useAuthContext } from "../../context/AuthContext";
+import { useAuthContext } from "@/context/AuthContext";
 
 const { Sider } = Layout;
 
@@ -79,48 +79,60 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       trigger={null}
       collapsible
       collapsed={collapsed}
-      className="bg-deep-forest! min-h-screen sticky left-0 top-0 shadow-2xl"
-      width={260}
-      collapsedWidth={70}
+      className="bg-deep-forest!    left-0 top-0 shadow-2xl"
+      width={200}
+      collapsedWidth={80}
       breakpoint="md"
       onBreakpoint={(broken) => {
         setCollapsed(broken);
       }}
     >
-      <div className="p-6 text-center">
-        <Link to="/" className="text-xl font-bold transition-all duration-300">
-          {collapsed ? (
-            <span className="animate-in fade-in zoom-in duration-300">
-              <span className="text-abstract-white">T</span>
-              <span className="text-dark-sea-green">M</span>
-            </span>
-          ) : (
-            <span className="animate-in fade-in duration-300">
-              <span className="text-abstract-white">Task</span>
-              <span className="text-dark-sea-green">Manager</span>
-            </span>
-          )}
-        </Link>
-      </div>
+      <div className="flex flex-col h-full">
+        <div className="p-6 text-center shrink-0">
+          <Link
+            to="/"
+            className="text-xl font-bold transition-all duration-300"
+          >
+            {collapsed ? (
+              <span className="animate-in fade-in zoom-in duration-300">
+                <span className="text-abstract-white">T</span>
+                <span className="text-dark-sea-green">M</span>
+              </span>
+            ) : (
+              <span className="animate-in fade-in duration-300">
+                <span className="text-abstract-white">Task</span>
+                <span className="text-dark-sea-green">Manager</span>
+              </span>
+            )}
+          </Link>
+        </div>
 
-      <Menu
-        mode="inline"
-        selectedKeys={[location.pathname]}
-        className="bg-transparent! border-none! custom-sidebar-menu"
-        items={menuItems}
-        theme="dark"
-      />
+        <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar ">
+          <Menu
+            mode="inline"
+            selectedKeys={[location.pathname]}
+            className="bg-transparent! border-none! custom-sidebar-menu"
+            items={menuItems}
+            theme="dark"
+          />
+        </div>
 
-      <div className="absolute bottom-6 w-full px-4">
-        <Button
-          type="primary"
-          size="large"
-          icon={<LogoutOutlined />}
-          onClick={handleLogout}
-          className="bg-deep-forest! text-abstract-white! border-none! hover:text-white! hover:bg-deep-terracotta!  transition-all duration-300 overflow-hidden"
-        >
-          {!collapsed && <span className="font-semibold">Logout</span>}
-        </Button>
+        <div className="p-4 shrink-0 border-t border-white/10">
+          <Button
+            type="primary"
+            size="large"
+            icon={<LogoutOutlined />}
+            onClick={handleLogout}
+            className={`
+            bg-deep-forest! text-abstract-white! border-none! 
+            hover:text-white! hover:bg-deep-terracotta! 
+            transition-all duration-300 flex items-center justify-center
+            ${collapsed ? "w-[45px]" : "w-full"}
+            `}
+          >
+            {!collapsed && <span className="font-semibold">Logout</span>}
+          </Button>
+        </div>
       </div>
     </Sider>
   );

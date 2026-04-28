@@ -143,7 +143,7 @@ const TopBar = () => {
 
   return (
     <header
-      className={`h-16 bg-white border-b border-slate-mist/30 flex items-center justify-between ${isDashboard ? "flex-1 justify-end!" : ""} px-0 sm:px-6!  space-x-3 sticky top-0 z-10`}
+      className={`h-16 bg-white border-b border-slate-mist/30 flex items-center justify-between ${isDashboard ? "flex-1 justify-end!" : ""} px-2 sm:px-6!  space-x-3 sticky top-0 z-10`}
     >
       {!isDashboard && (
         <div className="flex-1">
@@ -156,7 +156,7 @@ const TopBar = () => {
         </div>
       )}
 
-      <div className="flex items-center space-x-1 shrink-0">
+      <div className="flex items-center space-x-2 shrink-0">
         <Dropdown
           trigger={["click"]}
           placement="bottomRight"
@@ -248,7 +248,7 @@ const TopBar = () => {
           >
             <Space className="cursor-pointer group">
               <Avatar
-                size={{ xs: 32, sm: 40, md: 40, lg: 40, xl: 40, xxl: 40 }}
+                size={{ xs: 38, sm: 45, md: 45, lg: 45, xl: 45, xxl: 45 }}
                 icon={<UserOutlined />}
                 src={user?.avatar && user?.avatar !== "" ? user.avatar : null}
                 className="bg-dark-sea-green group-hover:scale-110 transition-transform"
