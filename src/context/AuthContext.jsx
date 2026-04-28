@@ -68,7 +68,7 @@ const AuthContext = ({ children }) => {
     localStorage.removeItem("jwt");
     setState(intialState);
     window.toastify("Logout successful", "success");
-    navigate("/auth/login", { replace: true });
+    navigate("/", { replace: true });
   };
 
   return (
